@@ -50,21 +50,55 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="2"
-                    android:text="As Noticias recentes aparecerão aqui."
+                    android:text="As Noticias recentes aparecerão aqui. testando quebra de linha do texto da notícia"
                     android:textColor="@color/textoPrimario"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/textDataNoticia"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="1"
-                    android:fadeScrollbars="false"
-                    android:text="Data: 12\10\2019"
-                    android:textColor="@color/textoSecundario"
-                    android:textSize="10sp" />
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="left">
+
+                        <TextView
+                            android:id="@+id/autorNoticia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            android:fadeScrollbars="false"
+                            android:text="Autor: Fabiano da Silva Lira"
+                            android:textColor="@color/textoSecundario"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/dataNoticia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            android:fadeScrollbars="false"
+                            android:gravity="right"
+                            android:text="Data: 12/10/2019"
+                            android:textColor="@color/textoSecundario"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

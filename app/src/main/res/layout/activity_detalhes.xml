@@ -70,7 +70,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="28dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:gravity="left">
@@ -79,9 +79,9 @@
                         android:id="@+id/imageView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginLeft="3dp"
                         app:srcCompat="@drawable/ic_autor_24dp"
                         tools:ignore="VectorDrawableCompat" />
 
@@ -93,7 +93,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="27dp"
                         android:layout_marginLeft="27dp"
-                        android:layout_marginBottom="9dp"
+                        android:layout_marginBottom="6dp"
                         android:text="Autor: Fabiano Lira"
                         android:textSize="12sp" />
                 </RelativeLayout>

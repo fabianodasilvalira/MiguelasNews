@@ -61,7 +61,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
             imagem = itemView.findViewById(R.id.imageNoticia);
             titulo = itemView.findViewById(R.id.textNoticiasRecentes);
-            data = itemView.findViewById(R.id.textDataNoticia);
+            data = itemView.findViewById(R.id.autorNoticia);
 
         }
     }
