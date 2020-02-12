@@ -3,11 +3,17 @@ package com.fabianolira.appmiguelasnews.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -34,7 +40,7 @@ public class CategoriasFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_categorias, container, false);
-
+        setHasOptionsMenu(true);
 
 
         recyclerViewCategoria = v.findViewById(R.id.recyclerViewCategoria);
@@ -61,7 +67,22 @@ public class CategoriasFragment extends Fragment {
 
         return v;
     }
-
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+        final MenuItem searchMenuItem = menu.findItem(R.id.search);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    searchMenuItem.collapseActionView();
+                    searchView.setQuery("",false);
+                }
+            }
+        });
+    }
 
 
     private void criarNoticias() {

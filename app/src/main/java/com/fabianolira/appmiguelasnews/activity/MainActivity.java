@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Menu Home clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_noticias){
+                    Intent intent = new Intent(getBaseContext(),ExcluirActivity.class);
+                    startActivity(intent);
                     Toast.makeText(MainActivity.this, "Menu Noticias clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_favoritos){
