@@ -1,6 +1,9 @@
 package com.fabianolira.appmiguelasnews.json;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 
 import java.io.IOException;
 
@@ -33,6 +36,20 @@ public class JsonUtils {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public static boolean estaconectado(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        if (cm == null){
+            return false;
+        }else{
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if(networkInfo.isConnected())
+                return true;
+        }
+        return false;
+
+
     }
 
 }

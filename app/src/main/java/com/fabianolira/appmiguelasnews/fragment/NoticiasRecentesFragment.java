@@ -9,7 +9,9 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +36,10 @@ public class NoticiasRecentesFragment extends Fragment {
     RecyclerView recyclerViewNoticias;
     private NoticiasAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
+
     ProgressBar progressBar;
+
+    SwipeRefreshLayout swipeRefreshLayout = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +48,9 @@ public class NoticiasRecentesFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_noticias_recentes, container, false);
 
         setHasOptionsMenu(true);
+        swipeRefreshLayout = v.findViewById(R.id.swipe);
+        swipeRefreshLayout.setColorSchemeColors(R.color.laranja, R.color.colorPrimary);
+
 
         recyclerViewNoticias = v.findViewById(R.id.recyclerViewNoticias);
 
@@ -59,6 +67,18 @@ public class NoticiasRecentesFragment extends Fragment {
         recyclerViewNoticias.setLayoutManager(layoutManager);
         recyclerViewNoticias.setHasFixedSize(true);
         recyclerViewNoticias.setAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
 
         return v;
     }

@@ -39,6 +39,7 @@ public class ExcluirActivity extends AppCompatActivity {
 
             try {
                 JSONObject obj = new JSONObject(s);
+
                 txt.setText(obj.toString());
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -6,4 +6,5 @@
     <color name="textoPrimario">#212121</color>
     <color name="textoSecundario">#757575</color>
     <color name="textosIcones">#FFFFFF</color>
+    <color name="laranja">#FF9900</color>
 </resources>
