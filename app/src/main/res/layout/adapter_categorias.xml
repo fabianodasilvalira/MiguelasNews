@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutCategoria"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,8 +12,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="4dp"
         app:cardElevation="3sp"
-        app:cardUseCompatPadding="true"
-        >
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -28,7 +27,7 @@
             <ImageView
                 android:id="@+id/imageCategoria"
                 android:layout_width="90dp"
-                android:layout_height="80dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
                 android:scaleType="centerCrop"
@@ -46,10 +45,10 @@
                     android:id="@+id/textTituloCategoria"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:padding="5dp"
                     android:text="Categoria"
-                    android:layout_gravity="center"
                     android:textColor="@color/textoPrimario"
                     android:textSize="14sp" />
 

@@ -1,87 +1,80 @@
 package com.fabianolira.appmiguelasnews.model;
 
 public class Noticia {
-    private String idCategoria;
-    private String categoria;
-    private int imgCategoria;
-    private String idNoticia;
-    private String tituloNoticia;
-    private String descricaoNoticia;
-    private String dataNoticia;
-    private int imgNoticia;
+
+
+    private int id_noticias;
+    //private String id_categoria;
+    private String titulo_noticia;
+    private String descricao_noticia;
+    private String autor_noticia;
+    private String data_noticia;
+    private String imagem_noticia;
+    private int ativo;
 
     public Noticia() {
     }
 
-
-
-    public Noticia(String tituloNoticia, String dataNoticia, int imgNoticia) {
-        this.tituloNoticia = tituloNoticia;
-        this.dataNoticia = dataNoticia;
-        this.imgNoticia = imgNoticia;
+    public Noticia(String titulo_noticia, String autor_noticia, String data_noticia, String imagem_noticia) {
+        this.titulo_noticia = titulo_noticia;
+        this.autor_noticia = autor_noticia;
+        this.data_noticia = data_noticia;
+        this.imagem_noticia = imagem_noticia;
     }
 
-    public String getIdCategoria() {
-        return idCategoria;
+    public int getId_noticias() {
+        return id_noticias;
     }
 
-    public void setIdCategoria(String idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setId_noticias(int id_noticias) {
+        this.id_noticias = id_noticias;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getTitulo_noticia() {
+        return titulo_noticia;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setTitulo_noticia(String titulo_noticia) {
+        this.titulo_noticia = titulo_noticia;
     }
 
-    public int getImgCategoria() {
-        return imgCategoria;
+    public String getDescricao_noticia() {
+        return descricao_noticia;
     }
 
-    public void setImgCategoria(int imgCategoria) {
-        this.imgCategoria = imgCategoria;
+    public void setDescricao_noticia(String descricao_noticia) {
+        this.descricao_noticia = descricao_noticia;
     }
 
-    public String getIdNoticia() {
-        return idNoticia;
+    public String getAutor_noticia() {
+        return autor_noticia;
     }
 
-    public void setIdNoticia(String idNoticia) {
-        this.idNoticia = idNoticia;
+    public void setAutor_noticia(String autor_noticia) {
+        this.autor_noticia = autor_noticia;
     }
 
-    public String getTituloNoticia() {
-        return tituloNoticia;
+    public String getData_noticia() {
+        return data_noticia;
     }
 
-    public void setTituloNoticia(String tituloNoticia) {
-        this.tituloNoticia = tituloNoticia;
+    public void setData_noticia(String data_noticia) {
+        this.data_noticia = data_noticia;
     }
 
-    public String getDescricaoNoticia() {
-        return descricaoNoticia;
+    public String getImagem_noticia() {
+        return imagem_noticia;
     }
 
-    public void setDescricaoNoticia(String descricaoNoticia) {
-        this.descricaoNoticia = descricaoNoticia;
+    public void setImagem_noticia(String imagem_noticia) {
+        this.imagem_noticia = imagem_noticia;
     }
 
-    public String getDataNoticia() {
-        return dataNoticia;
+    public int getAtivo() {
+        return ativo;
     }
 
-    public void setDataNoticia(String dataNoticia) {
-        this.dataNoticia = dataNoticia;
-    }
-
-    public int getImgNoticia() {
-        return imgNoticia;
-    }
-
-    public void setImgNoticia(int imgNoticia) {
-        this.imgNoticia = imgNoticia;
+    public void setAtivo(int ativo) {
+        this.ativo = ativo;
     }
 }

@@ -5,12 +5,12 @@ public class Categoria {
     private String idCategoria;
     private String nomeCategoria;
     private String urlCategoria;
-    private int imgCategoria;
+    private String imgCategoria;
 
     public Categoria() {
     }
 
-    public Categoria(String nomeCategoria, int imgCategoria) {
+    public Categoria(String nomeCategoria, String imgCategoria) {
         this.nomeCategoria = nomeCategoria;
         this.imgCategoria = imgCategoria;
     }
@@ -39,11 +39,11 @@ public class Categoria {
         this.urlCategoria = urlCategoria;
     }
 
-    public int getImgCategoria() {
+    public String getImgCategoria() {
         return imgCategoria;
     }
 
-    public void setImgCategoria(int imgCategoria) {
+    public void setImgCategoria(String imgCategoria) {
         this.imgCategoria = imgCategoria;
     }
 }
