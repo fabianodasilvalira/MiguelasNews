@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "509203168166",
+    "firebase_url": "https://miguelasnews.firebaseio.com",
+    "project_id": "miguelasnews",
+    "storage_bucket": "miguelasnews.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509203168166:android:17c9e02cb531d070cd6d67",
+        "android_client_info": {
+          "package_name": "com.fabianolira.appmiguelasnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509203168166-e0bigr7q5ricg2f5khb0sje1pa51cp8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fabianolira.appmiguelasnews",
+            "certificate_hash": "ca48f84241ec2fff38fa6d996aa9c3480b5d5671"
+          }
+        },
+        {
+          "client_id": "509203168166-gkeumi7brv41mtbsh4n9t2nee202d1rb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7OGhZKSLu0hHH87xRnuxkihNH-JPfgyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509203168166-gkeumi7brv41mtbsh4n9t2nee202d1rb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,34 +23,31 @@ import com.fabianolira.appmiguelasnews.util.Config;
 import java.util.List;
 
 
-public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
+public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPorCategoriaAdapter.MyViewHolder> {
 
     private  List<Noticia> items;
     private Context context;
     private Noticia noticia;
 
 
-    public NoticiasAdapter(Context context, List<Noticia> listaNoticias) {
+    public NoticiasPorCategoriaAdapter(Context context, List<Noticia> listaNoticias) {
         this.items = listaNoticias;
         this.context = context;
     }
 
 
     @Override
-    public NoticiasAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NoticiasPorCategoriaAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_noticias, parent, false);
         return new MyViewHolder(itemLista);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull NoticiasPorCategoriaAdapter.MyViewHolder holder, final int position) {
 
         //Picasso.with(context).load("http://192.168.3.10/api_noticias_Fabiano/web/" + items.get(position)
-                                        //.getImagem_noticia()).placeholder(R.mipmap.ic_launcher).into(holder.imagem);
+        //.getImagem_noticia()).placeholder(R.mipmap.ic_launcher).into(holder.imagem);
         Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_noticia()).into(holder.imagem);
-
-
-        //Log.d("imagemnoticia", "imagem : " + items.get(position).getImagem_noticia());
 
         holder.titulo.setText(items.get(position).getTitulo_noticia());
         holder.data.setText(items.get(position).getData_noticia());
@@ -61,10 +58,11 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 noticia = items.get(position);
                 Config.ID_NOTICIA  = String.valueOf(noticia.getId_noticias());
+
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                 context.startActivity(intent);
+
             }
         });
 

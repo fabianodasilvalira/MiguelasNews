@@ -4,7 +4,7 @@ public class Noticia {
 
 
     private int id_noticias;
-    //private String id_categoria;
+    private String id_categoria;
     private String titulo_noticia;
     private String descricao_noticia;
     private String autor_noticia;
@@ -20,6 +20,14 @@ public class Noticia {
         this.autor_noticia = autor_noticia;
         this.data_noticia = data_noticia;
         this.imagem_noticia = imagem_noticia;
+    }
+
+    public String getId_categoria() {
+        return id_categoria;
+    }
+
+    public void setId_categoria(String id_categoria) {
+        this.id_categoria = id_categoria;
     }
 
     public int getId_noticias() {

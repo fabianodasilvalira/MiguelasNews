@@ -1,6 +1,8 @@
 package com.fabianolira.appmiguelasnews.fragment;
 
 
+import android.app.AlertDialog;
+import android.app.StatusBarManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -38,12 +40,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 public class CategoriasFragment extends Fragment {
-    RecyclerView recyclerViewCategoria;
+    private RecyclerView recyclerViewCategoria;
     private CategoriasAdapter adapter;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private List<Categoria> listaCategoria = new ArrayList<>();
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
+    private AlertDialog dialog;
+    private Categoria categoria;
+
+    int tamTexto = 0;
+    ArrayList<String> array_id_categoria, array_nome_categoria, array_img_categoria;
+    String[] str_id_categoria, str_nome_categoria, str_img_categoria;
 
 
     @Override
@@ -60,8 +70,22 @@ public class CategoriasFragment extends Fragment {
         recyclerViewCategoria.setLayoutManager(layoutManager);
         recyclerViewCategoria.setHasFixedSize(true);
 
+        array_id_categoria   = new ArrayList<String>();
+        array_nome_categoria = new ArrayList<String>();
+        array_img_categoria  = new ArrayList<String>();
+
+        str_id_categoria   = new String[array_id_categoria.size()];
+        str_nome_categoria = new String[array_nome_categoria.size()];
+        str_img_categoria  = new String[array_img_categoria.size()];
+
 
         if (JsonUtils.estaconectado(getContext())) {
+            dialog = new SpotsDialog.Builder()
+                    .setContext(getContext())
+                    .setMessage("Carregando categorias!")
+                    .setCancelable(false)
+                    .build();
+            dialog.show();
             new CategoriaTask().execute(Config.URL_SERVIDOR + "api/categoria");
 
         } else {
@@ -76,6 +100,7 @@ public class CategoriasFragment extends Fragment {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
+
                         new CategoriaTask().execute(Config.URL_SERVIDOR + "api/categoria");
                     }
                 }, 2000);
@@ -125,8 +150,21 @@ public class CategoriasFragment extends Fragment {
 
             }
 
+            for (int j = 0; j<listaCategoria.size(); j++){
+                categoria = listaCategoria.get(j);
+                array_id_categoria.add(categoria.getIdCategoria());
+                str_id_categoria = array_id_categoria.toArray(str_id_categoria);
+
+                array_nome_categoria.add(categoria.getNomeCategoria());
+                str_nome_categoria = array_nome_categoria.toArray(str_nome_categoria);
+
+                array_img_categoria.add(categoria.getImgCategoria());
+                str_img_categoria = array_img_categoria.toArray(str_img_categoria);
+
+            }
             adapter = new CategoriasAdapter(listaCategoria, getActivity());
             recyclerViewCategoria.setAdapter(adapter);
+            dialog.dismiss();
         }
     }
 
@@ -143,6 +181,35 @@ public class CategoriasFragment extends Fragment {
                     searchMenuItem.collapseActionView();
                     searchView.setQuery("", false);
                 }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                tamTexto = newText.length();
+
+                listaCategoria.clear();
+
+                for (int i=0;i<str_nome_categoria.length;i++){
+                    if(tamTexto<=str_nome_categoria[i].length()){
+                        if(str_nome_categoria[i].toLowerCase().contains(newText.toLowerCase())){
+                            Categoria cat = new Categoria();
+                            cat.setIdCategoria(str_id_categoria[i]);
+                            cat.setNomeCategoria(str_nome_categoria[i]);
+                            cat.setImgCategoria(str_img_categoria[i]);
+                            listaCategoria.add(cat);
+                        }
+                    }
+                }
+                adapter = new CategoriasAdapter(listaCategoria, getActivity());
+                recyclerViewCategoria.setAdapter(adapter);
+                return false;
             }
         });
     }

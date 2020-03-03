@@ -5,35 +5,33 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.res.Resources;
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.fabianolira.appmiguelasnews.R;
-import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetalhesActivity extends AppCompatActivity {
+import dmax.dialog.SpotsDialog;
+
+public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     private ImageView imgPrincipal, imgFavorito;
     private TextView txtTitulo, txtData, txtAutor, webDescricao;
@@ -43,6 +41,8 @@ public class DetalhesActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    private AlertDialog dialog;
+    private TextView voltar;
 
     Noticia noticia;
 
@@ -52,9 +52,12 @@ public class DetalhesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes);
+        setContentView(R.layout.activity_noticias_detalhes);
+
 
         toolbar = findViewById(R.id.toolbar);
+        voltar = findViewById(R.id.voltar);
+
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -97,13 +100,21 @@ public class DetalhesActivity extends AppCompatActivity {
         listaNoticia = new ArrayList<Noticia>();
 
         if (JsonUtils.estaconectado(getApplicationContext())) {
+            dialog = new SpotsDialog.Builder()
+                    .setContext(this)
+                    .setMessage("Carregando a noticia!")
+                    .setCancelable(false)
+                    .build();
+            dialog.show();
             new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
-            Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
+            //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
         } else {
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
     }
+
+
 
     public class NoticiaTask extends AsyncTask<String, Void, String> {
 
@@ -142,7 +153,7 @@ public class DetalhesActivity extends AppCompatActivity {
     public void populaDados() {
 
         noticia = listaNoticia.get(0);
-        Log.d("listaNoticia", "populaDados: " + noticia);
+        //Log.d("listaNoticia", "populaDados: " + noticia);
 
         txtTitulo.setText(noticia.getTitulo_noticia());
         txtData.setText(noticia.getData_noticia());
@@ -150,9 +161,9 @@ public class DetalhesActivity extends AppCompatActivity {
         webDescricao.setText(noticia.getDescricao_noticia());
 
 
-        Picasso.with(this).load("https://storage.stwonline.com.br/180graus/uploads/ckeditor/pictures/2279733/whatsapp-image-2020-02-14-at-08.52.04.jpeg").into(imgPrincipal);
+        Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_noticia()).into(imgPrincipal);
 
-
+        dialog.dismiss();
         /* WebSettings webSettings = webDescricao.getSettings();
         Resources res = getResources();
         int tamFont = 20;
@@ -172,6 +183,11 @@ public class DetalhesActivity extends AppCompatActivity {
         webDescricao.loadData(estrutura, mimeType, encoding);
 
         Log.d("popula dados", "populaDados: " + textoHtml);*/
+
+    }
+
+    public void voltar(View view) {
+        onBackPressed();
 
     }
 
