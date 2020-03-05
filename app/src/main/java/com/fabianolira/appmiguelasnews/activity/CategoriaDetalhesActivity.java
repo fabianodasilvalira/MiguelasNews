@@ -98,9 +98,9 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
-                        new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia"  + Config.ID_CATEGORIA);
+                        new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia/por-categoria?id=" + Config.ID_CATEGORIA);
                     }
-                }, 2000);
+                }, 1000);
             }
         });
     }
@@ -153,7 +153,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
 
             }
 
-
+            Collections.reverse(listaNoticia);
             adapter = new NoticiasPorCategoriaAdapter(getApplicationContext(), listaNoticia);
             recyclerViewNoticias.setAdapter(adapter);
             dialog.dismiss();

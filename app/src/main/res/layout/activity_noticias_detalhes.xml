@@ -176,6 +176,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:defaultFocusHighlightEnabled="true"
         android:src="@drawable/ic_favorito_branco_24dp"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.fragment.TabFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Noticias");
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);

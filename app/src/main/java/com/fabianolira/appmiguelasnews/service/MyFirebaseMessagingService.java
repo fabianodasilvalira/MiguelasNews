@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.MainActivity;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
+import com.fabianolira.appmiguelasnews.util.Config;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -26,23 +27,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String titulo = notificacao.getNotification().getTitle();
         String corpo = notificacao.getNotification().getBody();
+        String id = notificacao.getNotification().getTicker();
 
-        enviarNotificacao(titulo, corpo);
-        //Log.i("notificacao", "Notificação recebida");
+        enviarNotificacao(titulo, corpo, id);
+        Log.i("notificacao", "Notificação recebida" + id);
     }
 
-    private void enviarNotificacao(String titulo, String corpo){
+    private void enviarNotificacao(String titulo, String corpo, String id){
 
         String canal = getString(R.string.default_notification_channel_id);
         Uri uriSom = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        Log.i("notificacao", "Notificação recebida" + id);
+        Config.ID_NOTICIA  = id;
+        Intent intent = new Intent(this, NoticiasDetalhesActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |  Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
 
         // Criar notificacao
         NotificationCompat.Builder notificacao = new NotificationCompat.Builder(this, canal)
                 .setContentTitle(titulo)
                 .setContentText(corpo)
-                .setSmallIcon(R.drawable.ic_sentiment_satisfied_black_24dp)
+                .setSmallIcon(R.drawable.noticia)
                 .setSound(uriSom)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);

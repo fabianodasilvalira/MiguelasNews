@@ -139,10 +139,10 @@ public class NoticiasRecentesFragment extends Fragment {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-                        limpa();
+
                         new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
                     }
-                }, 2000);
+                }, 1000);
             }
         });
 

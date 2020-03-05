@@ -146,6 +146,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
+
             populaDados();
         }
     }

@@ -80,12 +80,12 @@ public class CategoriasFragment extends Fragment {
 
 
         if (JsonUtils.estaconectado(getContext())) {
-            dialog = new SpotsDialog.Builder()
+         /*   dialog = new SpotsDialog.Builder()
                     .setContext(getContext())
                     .setMessage("Carregando categorias!")
                     .setCancelable(false)
                     .build();
-            dialog.show();
+            dialog.show();*/
             new CategoriaTask().execute(Config.URL_SERVIDOR + "api/categoria");
 
         } else {
@@ -162,9 +162,10 @@ public class CategoriasFragment extends Fragment {
                 str_img_categoria = array_img_categoria.toArray(str_img_categoria);
 
             }
+
             adapter = new CategoriasAdapter(listaCategoria, getActivity());
             recyclerViewCategoria.setAdapter(adapter);
-            dialog.dismiss();
+            //dialog.dismiss();
         }
     }
 
