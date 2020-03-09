@@ -135,12 +135,12 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
                     JSONObject obj = raiz.getJSONObject(i);
 
                     Noticia noticia = new Noticia();
-                    noticia.setId_noticias(obj.getInt("id_noticias"));
-                    noticia.setImagem_noticia(obj.getString("image_noticia"));
-                    noticia.setTitulo_noticia(obj.getString("titulo_noticia"));
-                    noticia.setDescricao_noticia(obj.getString("descricao_noticia"));
-                    noticia.setAutor_noticia(obj.getString("autor_noticia"));
-                    noticia.setData_noticia(obj.getString("data_noticia"));
+                    noticia.setId(obj.getString("id"));
+                    noticia.setImage_noticia(obj.getString("image_noticia"));
+                    noticia.setTitulo(obj.getString("titulo"));
+                    noticia.setCorpo(obj.getString("corpo"));
+                    noticia.setFonte_nm(obj.getString("fonte_nm"));
+                    noticia.setDt_publicacao(obj.getString("dt_publicacao"));
 
                     Log.d("ListaNoticia", "noticia: " + obj + "\n");
 

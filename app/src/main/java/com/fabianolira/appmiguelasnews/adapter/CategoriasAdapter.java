@@ -20,6 +20,7 @@ import com.fabianolira.appmiguelasnews.activity.CategoriaDetalhesActivity;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
 import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.util.Config;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,18 +47,17 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImgCategoria()).into(holder.imagem);
-        //Log.d("Categoria", "onBindViewHolder: " + Config.URL_SERVIDOR + items.get(position).getImgCategoria());
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_categoria()).into(holder.imagem);
 
-        holder.titulo.setText(items.get(position).getNomeCategoria());
-
+        holder.titulo.setText(items.get(position).getNome());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 categoria = items.get(position);
-                Config.ID_CATEGORIA = categoria.getIdCategoria();
-                Config.TITULO_CATEGORIA = categoria.getNomeCategoria();
+                Log.d("categoria", "onClick: " + position);
+                Config.ID_CATEGORIA = categoria.getId();
+                Config.TITULO_CATEGORIA = categoria.getNome();
 
                 //Log.d("categoria", "onClick: " + Config.ID_CATEGORIA + categoria.getNomeCategoria());
                 Intent intent = new Intent(context, CategoriaDetalhesActivity.class);

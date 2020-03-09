@@ -47,20 +47,21 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         //Picasso.with(context).load("http://192.168.3.10/api_noticias_Fabiano/web/" + items.get(position)
                                         //.getImagem_noticia()).placeholder(R.mipmap.ic_launcher).into(holder.imagem);
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_noticia()).into(holder.imagem);
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImage_noticia()).into(holder.imagem);
 
 
         //Log.d("imagemnoticia", "imagem : " + items.get(position).getImagem_noticia());
 
-        holder.titulo.setText(items.get(position).getTitulo_noticia());
-        holder.data.setText(items.get(position).getData_noticia());
-        holder.autor.setText(items.get(position).getAutor_noticia());
+        holder.titulo.setText(items.get(position).getTitulo());
+        holder.data.setText(items.get(position).getDt_publicacao());
+        holder.autor.setText(items.get(position).getFonte_nm());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 noticia = items.get(position);
-                Config.ID_NOTICIA  = String.valueOf(noticia.getId_noticias());
+                Log.d("categoria", "onClick: " + position);
+                Config.ID_NOTICIA  = String.valueOf(noticia.getId());
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

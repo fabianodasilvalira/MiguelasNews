@@ -19,37 +19,43 @@ public class JsonUtils {
     private static HttpClient httpClient = HttpClientBuilder.create().build();
 
 
-    public JsonUtils(Context context){
+    public JsonUtils(Context context) {
         this.context = context;
     }
 
-    public static String retornaJsonDeGet(String url){
+    public static String retornaJsonDeGet(String url) {
         HttpGet client = new HttpGet(url);
-        client.addHeader ("Content-type", "application/json");
+        client.addHeader("Content-type", "application/json");
 
         HttpResponse response = null;
         String json = null;
         try {
             response = httpClient.execute(client);
             json = EntityUtils.toString(response.getEntity());
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return json;
     }
 
-    public static boolean estaconectado(Context context){
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
-        if (cm == null){
-            return false;
-        }else{
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if(networkInfo.isConnected())
+    public static boolean estaconectado(Context context) {
+        ConnectivityManager conmag = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conmag != null) {
+            conmag.getActiveNetworkInfo();
+
+            //Verifica internet pela WIFI
+            if (conmag.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
                 return true;
+            }
+
+            //Verifica se tem internet móvel
+            if (conmag.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
+                return true;
+            }
         }
+
         return false;
 
     }
-
-
 }

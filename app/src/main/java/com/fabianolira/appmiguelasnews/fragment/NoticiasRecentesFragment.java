@@ -27,10 +27,10 @@ import android.widget.Toast;
 
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
-import com.fabianolira.appmiguelasnews.api.DataService;
+import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
-import com.fabianolira.appmiguelasnews.model.Fotos;
+import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
@@ -39,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,6 +61,7 @@ public class NoticiasRecentesFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Noticia noticia;
+    private Retrofit retrofit;
 
     int tamTexto = 0;
     ArrayList<String> array_noticia, array_id_noticia, array_id_categoria, array_titulo, array_imagem, array_autor, array_data, array_ativo;
@@ -80,7 +80,6 @@ public class NoticiasRecentesFragment extends Fragment {
         progressBar = v.findViewById(R.id.progressBar);
 
 
-
         //configurar recyclerview
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewNoticias.setLayoutManager(layoutManager);
@@ -93,7 +92,7 @@ public class NoticiasRecentesFragment extends Fragment {
         array_id_noticia = new ArrayList<String>();
         array_id_categoria = new ArrayList<String>();
         array_titulo = new ArrayList<String>();
-        array_imagem= new ArrayList<String>();
+        array_imagem = new ArrayList<String>();
         array_autor = new ArrayList<String>();
         array_data = new ArrayList<String>();
         array_ativo = new ArrayList<String>();
@@ -108,27 +107,28 @@ public class NoticiasRecentesFragment extends Fragment {
         str_ativo = new String[array_ativo.size()];
 
 
-
-        //configurar adapter
-        adapter = new NoticiasAdapter(getActivity(), listaNoticia);
-        recyclerViewNoticias.setAdapter(adapter);
-
-        dialog = new SpotsDialog.Builder()
-                .setContext(getContext())
-                .setMessage("Carregando noticias, Aguarde!")
-                .setCancelable(false)
-                .build();
-        dialog.show();
-
         if (JsonUtils.estaconectado(getContext())) {
 
+            dialog = new SpotsDialog.Builder()
+                    .setContext(getContext())
+                    .setMessage("Carregando as noticias, Aguarde!")
+                    .setCancelable(false)
+                    .build();
+            dialog.show();
 
-            new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(Config.URL_SERVIDOR)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            carregarNoticias();
+
+            //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
             //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
 
 
-            
         } else {
+            Log.d("Sem conexao", "onCreateView: ");
             Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
@@ -139,15 +139,73 @@ public class NoticiasRecentesFragment extends Fragment {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-
-                        new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+                        limpa();
+                        carregarNoticias();
+                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
                     }
-                }, 1000);
+                }, 2000);
             }
         });
 
-
+        carregarNoticias();
         return v;
+    }
+
+    public void carregarNoticias() {
+        NoticiasService service = retrofit.create(NoticiasService.class);
+        Call<List<Noticia>> call = service.recuperarNoticia();
+
+        call.enqueue(new Callback<List<Noticia>>() {
+            @Override
+            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                if (response.isSuccessful()) {
+                    listaNoticia = response.body();
+                    //String exe =  response.message(str_data["id"]);
+
+
+
+                }
+                for (int j = 0; j < listaNoticia.size(); j++) {
+                    noticia = listaNoticia.get(j);
+
+                    array_noticia.add(noticia.getTitulo());
+                    str_noticia = array_noticia.toArray(str_noticia);
+
+                    array_id_noticia.add(String.valueOf(noticia.getId()));
+                    str_id_noticia = array_id_noticia.toArray(str_id_noticia);
+
+                    array_id_categoria.add(noticia.getId_categoria());
+                    str_id_categoria = array_id_categoria.toArray(str_id_categoria);
+
+                    array_titulo.add(noticia.getTitulo());
+                    str_titulo = array_titulo.toArray(str_titulo);
+
+                    array_imagem.add(noticia.getImage_noticia());
+                    str_imagem = array_imagem.toArray(str_imagem);
+
+                    array_autor.add(noticia.getFonte_nm());
+                    str_autor = array_autor.toArray(str_autor);
+
+                    array_data.add(noticia.getDt_publicacao());
+                    str_data = array_data.toArray(str_data);
+
+                    array_ativo.add(String.valueOf(noticia.getStatus()));
+                    str_ativo = array_ativo.toArray(str_ativo);
+                }
+
+                Collections.reverse(listaNoticia);
+                adapter = new NoticiasAdapter(getActivity(), listaNoticia);
+                recyclerViewNoticias.setAdapter(adapter);
+                dialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Noticia>> call, Throwable t) {
+                Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
+            }
+        });
     }
 
     public void limpa() {
@@ -161,7 +219,7 @@ public class NoticiasRecentesFragment extends Fragment {
         }
     }
 
-    public class NoticiaTask extends AsyncTask<String, Void, String> {
+   /* public class NoticiaTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -187,7 +245,7 @@ public class NoticiasRecentesFragment extends Fragment {
                     noticia.setAutor_noticia(obj.getString("autor_noticia"));
                     noticia.setData_noticia(obj.getString("data_noticia"));
 
-                    //Log.d("ListaNoticia", "noticia: " + obj + "\n");
+                    Log.d("ListaNoticia", "noticia: " + obj + "\n");
 
                     listaNoticia.add(noticia);
 
@@ -198,7 +256,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
             }
 
-            for (int j = 0; j<listaNoticia.size(); j++){
+            for (int j = 0; j < listaNoticia.size(); j++) {
                 noticia = listaNoticia.get(j);
 
                 array_noticia.add(noticia.getTitulo_noticia());
@@ -231,7 +289,7 @@ public class NoticiasRecentesFragment extends Fragment {
             recyclerViewNoticias.setAdapter(adapter);
             dialog.dismiss();
         }
-    }
+    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -258,26 +316,28 @@ public class NoticiasRecentesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 tamTexto = newText.length();
+
                 listaNoticia.clear();
 
-                for(int i = 0; i < str_titulo.length; i++){
-                    if (str_titulo[i].toLowerCase().contains(newText.toLowerCase())){
+
+                for (int i = 0; i < str_titulo.length; i++) {
+                    if (str_titulo[i].toLowerCase().contains(newText.toLowerCase())) {
                         Noticia objItem = new Noticia();
 
-                        objItem.setId_noticias(Integer.parseInt(str_id_noticia[i]));
+                        objItem.setId(str_id_noticia[i]);
                         objItem.setId_categoria(str_id_categoria[i]);
-                        objItem.setTitulo_noticia(str_titulo[i]);
-                        objItem.setDescricao_noticia(str_noticia[i]);
-                        objItem.setData_noticia(str_data[i]);
-                        objItem.setAutor_noticia(str_autor[i]);
-                        objItem.setImagem_noticia(str_imagem[i]);
-                        objItem.setAtivo(Integer.parseInt(str_ativo[i]));
+                        objItem.setTitulo(str_titulo[i]);
+                        objItem.setCorpo(str_noticia[i]);
+                        objItem.setDt_publicacao(str_data[i]);
+                        objItem.setFonte_nm(str_autor[i]);
+                        objItem.setImage_noticia(str_imagem[i]);
+                        objItem.setStatus(str_ativo[i]);
                         listaNoticia.add(objItem);
 
 
                     }
                 }
-
+                Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
                 recyclerViewNoticias.setAdapter(adapter);
                 return false;

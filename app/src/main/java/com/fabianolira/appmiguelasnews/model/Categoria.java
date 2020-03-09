@@ -2,48 +2,67 @@ package com.fabianolira.appmiguelasnews.model;
 
 public class Categoria {
 
-    private String idCategoria;
-    private String nomeCategoria;
-    private String urlCategoria;
-    private String imgCategoria;
+    private String id;
+    private String nome;
+    private String id_user;
+    private String imagem_categoria;
+    private String dt_in;
+    private String dt_up;
+
 
     public Categoria() {
     }
 
-    public Categoria(String nomeCategoria, String imgCategoria) {
-        this.nomeCategoria = nomeCategoria;
-        this.imgCategoria = imgCategoria;
+    public Categoria(String nome, String imagem_categoria) {
+        this.nome = nome;
+        this.imagem_categoria = imagem_categoria;
     }
 
-    public String getIdCategoria() {
-        return idCategoria;
+    public String getId() {
+        return id;
     }
 
-    public void setIdCategoria(String idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getNomeCategoria() {
-        return nomeCategoria;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeCategoria(String nomeCategoria) {
-        this.nomeCategoria = nomeCategoria;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getUrlCategoria() {
-        return urlCategoria;
+    public String getId_user() {
+        return id_user;
     }
 
-    public void setUrlCategoria(String urlCategoria) {
-        this.urlCategoria = urlCategoria;
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
-    public String getImgCategoria() {
-        return imgCategoria;
+    public String getImagem_categoria() {
+        return imagem_categoria;
     }
 
-    public void setImgCategoria(String imgCategoria) {
-        this.imgCategoria = imgCategoria;
+    public void setImagem_categoria(String imagem_categoria) {
+        this.imagem_categoria = imagem_categoria;
+    }
+
+    public String getDt_in() {
+        return dt_in;
+    }
+
+    public void setDt_in(String dt_in) {
+        this.dt_in = dt_in;
+    }
+
+    public String getDt_up() {
+        return dt_up;
+    }
+
+    public void setDt_up(String dt_up) {
+        this.dt_up = dt_up;
     }
 }
