@@ -1,7 +1,11 @@
 package com.fabianolira.appmiguelasnews.model;
 
-public class Noticia {
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.List;
+
+public class Noticia implements Serializable {
 
     private String id;
     private String id_categoria;
@@ -11,18 +15,18 @@ public class Noticia {
     private String fonte_url;
     private String dt_publicacao;
     private String status;
-    private String image_noticia;
+    private String imagen_capa;
+    private List imagens;
 
 
     public Noticia() {
     }
 
-    public Noticia(String titulo_noticia, String autor_noticia, String data_noticia, String imagem_noticia) {
+    public Noticia(String titulo_noticia, String autor_noticia, String data_noticia, List<Imagens> imagens) {
         this.titulo = titulo_noticia;
         this.fonte_nm = autor_noticia;
         this.dt_publicacao = data_noticia;
-        this.image_noticia = imagem_noticia;
-
+        this.imagens = imagens;
     }
 
     public String getId() {
@@ -89,11 +93,20 @@ public class Noticia {
         this.status = status;
     }
 
-    public String getImage_noticia() {
-        return image_noticia;
+    public String getImagen_capa() {
+        return imagen_capa;
     }
 
-    public void setImage_noticia(String image_noticia) {
-        this.image_noticia = image_noticia;
+    public void setImagen_capa(String imagen_capa) {
+        this.imagen_capa = imagen_capa;
+    }
+
+    public List getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(List imagens) {
+        this.imagens = imagens;
     }
 }
+

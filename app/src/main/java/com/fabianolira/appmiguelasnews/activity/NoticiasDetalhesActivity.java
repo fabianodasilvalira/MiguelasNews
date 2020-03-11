@@ -149,7 +149,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
                 Noticia noticia = new Noticia();
                 noticia.setId(obj.getString("id_noticias"));
-                noticia.setImage_noticia(obj.getString("image_noticia"));
+                //noticia.setImagen_capa(obj.getString("image_noticia"));
                 noticia.setTitulo(obj.getString("titulo_noticia"));
                 noticia.setCorpo(obj.getString("descricao_noticia"));
                 noticia.setFonte_nm(obj.getString("autor_noticia"));
@@ -178,7 +178,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         webDescricao.setText(noticia.getCorpo());
 
 
-        Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImage_noticia()).into(imgPrincipal);
+        //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagens()).into(imgPrincipal);
         //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_noticia()).into(imgCorpoNoticia);
 
         dialog.dismiss();

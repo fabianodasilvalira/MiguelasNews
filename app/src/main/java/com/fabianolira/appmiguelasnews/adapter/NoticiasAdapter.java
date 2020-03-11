@@ -47,10 +47,10 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         //Picasso.with(context).load("http://192.168.3.10/api_noticias_Fabiano/web/" + items.get(position)
                                         //.getImagem_noticia()).placeholder(R.mipmap.ic_launcher).into(holder.imagem);
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImage_noticia()).into(holder.imagem);
+        //Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagens()).into(holder.imagem);
 
 
-        //Log.d("imagemnoticia", "imagem : " + items.get(position).getImagem_noticia());
+        //Log.d("imagemnoticia", "imagem : " + Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagens()).into(holder.imagem));
 
         holder.titulo.setText(items.get(position).getTitulo());
         holder.data.setText(items.get(position).getDt_publicacao());

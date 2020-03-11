@@ -1,6 +1,7 @@
 package com.fabianolira.appmiguelasnews.api;
 
 import com.fabianolira.appmiguelasnews.model.Categoria;
+import com.fabianolira.appmiguelasnews.model.Imagens;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface NoticiasService {
 
     @GET("api/noticia")
     Call<List<Noticia>> recuperarNoticia();
+
+
 }

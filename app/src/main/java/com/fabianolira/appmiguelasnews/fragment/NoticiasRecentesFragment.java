@@ -2,6 +2,7 @@ package com.fabianolira.appmiguelasnews.fragment;
 
 
 import android.app.AlertDialog;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Categoria;
+import com.fabianolira.appmiguelasnews.model.Imagens;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
@@ -39,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,11 +60,14 @@ public class NoticiasRecentesFragment extends Fragment {
     RecyclerView recyclerViewNoticias;
     private NoticiasAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
+    private List<Noticia> listaImagens = new ArrayList<>();
+    private List<Imagens> listaImagens2 = new ArrayList<>();
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Noticia noticia;
     private Retrofit retrofit;
+    private Imagens imagens;
 
     int tamTexto = 0;
     ArrayList<String> array_noticia, array_id_noticia, array_id_categoria, array_titulo, array_imagem, array_autor, array_data, array_ativo;
@@ -155,17 +161,27 @@ public class NoticiasRecentesFragment extends Fragment {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarNoticia();
 
+
         call.enqueue(new Callback<List<Noticia>>() {
             @Override
             public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
                 if (response.isSuccessful()) {
                     listaNoticia = response.body();
-                    //String exe =  response.message(str_data["id"]);
+                    Noticia noticia = new Noticia();
+                    for (int i = 0; i < listaNoticia.size(); i++) {
+                        Noticia listaNot = listaNoticia.get(i);
 
+                        noticia.setId(listaNot.getId());
+                        Imagens imagens = new Imagens();
+
+
+                        Log.d("Entrou em noticia", "onResponse: " + listaNot.getImagens());
+                        
+                    }
 
 
                 }
-                for (int j = 0; j < listaNoticia.size(); j++) {
+                /*for (int j = 0; j < listaNoticia.size(); j++) {
                     noticia = listaNoticia.get(j);
 
                     array_noticia.add(noticia.getTitulo());
@@ -180,8 +196,8 @@ public class NoticiasRecentesFragment extends Fragment {
                     array_titulo.add(noticia.getTitulo());
                     str_titulo = array_titulo.toArray(str_titulo);
 
-                    array_imagem.add(noticia.getImage_noticia());
-                    str_imagem = array_imagem.toArray(str_imagem);
+                    //array_imagem.add(noticia.getImagen_capa());
+                    //str_imagem = array_imagem.toArray(str_imagem);
 
                     array_autor.add(noticia.getFonte_nm());
                     str_autor = array_autor.toArray(str_autor);
@@ -191,7 +207,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
                     array_ativo.add(String.valueOf(noticia.getStatus()));
                     str_ativo = array_ativo.toArray(str_ativo);
-                }
+                }*/
 
                 Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
@@ -330,7 +346,7 @@ public class NoticiasRecentesFragment extends Fragment {
                         objItem.setCorpo(str_noticia[i]);
                         objItem.setDt_publicacao(str_data[i]);
                         objItem.setFonte_nm(str_autor[i]);
-                        objItem.setImage_noticia(str_imagem[i]);
+                        //objItem.setImagen_capa(str_imagem[i]);
                         objItem.setStatus(str_ativo[i]);
                         listaNoticia.add(objItem);
 

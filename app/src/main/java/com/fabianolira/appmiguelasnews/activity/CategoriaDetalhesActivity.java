@@ -136,7 +136,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
 
                     Noticia noticia = new Noticia();
                     noticia.setId(obj.getString("id"));
-                    noticia.setImage_noticia(obj.getString("image_noticia"));
+                    //noticia.setImagen_capa(obj.getString("imagen_capa"));
                     noticia.setTitulo(obj.getString("titulo"));
                     noticia.setCorpo(obj.getString("corpo"));
                     noticia.setFonte_nm(obj.getString("fonte_nm"));
