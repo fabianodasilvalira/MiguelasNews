@@ -15,17 +15,17 @@ public class Noticia implements Serializable {
     private String fonte_url;
     private String dt_publicacao;
     private String status;
-    private String imagen_capa;
-    private List imagens;
+    private String imagem_capa;
+    private List<Imagens> imagens;
 
 
     public Noticia() {
     }
 
-    public Noticia(String titulo_noticia, String autor_noticia, String data_noticia, List<Imagens> imagens) {
-        this.titulo = titulo_noticia;
-        this.fonte_nm = autor_noticia;
-        this.dt_publicacao = data_noticia;
+    public Noticia(String titulo, String autor, String data, List<Imagens> imagens) {
+        this.titulo = titulo;
+        this.fonte_nm = autor;
+        this.dt_publicacao = data;
         this.imagens = imagens;
     }
 
@@ -94,18 +94,18 @@ public class Noticia implements Serializable {
     }
 
     public String getImagen_capa() {
-        return imagen_capa;
+        return imagem_capa;
     }
 
     public void setImagen_capa(String imagen_capa) {
-        this.imagen_capa = imagen_capa;
+        this.imagem_capa = imagen_capa;
     }
 
-    public List getImagens() {
+    public List<Imagens> getImagens() {
         return imagens;
     }
 
-    public void setImagens(List imagens) {
+    public void setImagens(List<Imagens> imagens) {
         this.imagens = imagens;
     }
 }

@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.ImagemAdapter;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
+import com.fabianolira.appmiguelasnews.model.Imagens;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 import com.google.android.material.appbar.AppBarLayout;
@@ -65,6 +66,19 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
+        collapsingToolbarLayout = findViewById(R.id.ColalapsingToolbar);
+
+        imgPrincipal = findViewById(R.id.imagemPrincipal);
+        // imgFavorito = findViewById(R.id.)
+        txtTitulo = findViewById(R.id.textTituloDetalhes);
+        txtAutor = findViewById(R.id.textAutor);
+        txtData = findViewById(R.id.textDataDetalheso);
+        webDescricao = findViewById(R.id.webDescricao);
+        imgPrincipal = findViewById(R.id.imagemPrincipal);
+        //imgCorpoNoticia = findViewById(R.id.imagemCorpoNoticias);
+
+        listaNoticia = new ArrayList<Noticia>();
+
         //Definir Layout
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
         recyclerImagens.setLayoutManager(layoutManager);
@@ -100,20 +114,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
             }
         });
 
-        collapsingToolbarLayout = findViewById(R.id.ColalapsingToolbar);
-
-
-        imgPrincipal = findViewById(R.id.imagemPrincipal);
-        // imgFavorito = findViewById(R.id.)
-
-        txtTitulo = findViewById(R.id.textTituloDetalhes);
-        txtAutor = findViewById(R.id.textAutor);
-        txtData = findViewById(R.id.textDataDetalheso);
-        webDescricao = findViewById(R.id.webDescricao);
-        imgPrincipal = findViewById(R.id.imagemPrincipal);
-        //imgCorpoNoticia = findViewById(R.id.imagemCorpoNoticias);
-
-        listaNoticia = new ArrayList<Noticia>();
 
         if (JsonUtils.estaconectado(getApplicationContext())) {
             dialog = new SpotsDialog.Builder()
@@ -147,15 +147,30 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                Noticia noticia = new Noticia();
-                noticia.setId(obj.getString("id_noticias"));
-                //noticia.setImagen_capa(obj.getString("image_noticia"));
-                noticia.setTitulo(obj.getString("titulo_noticia"));
-                noticia.setCorpo(obj.getString("descricao_noticia"));
-                noticia.setFonte_nm(obj.getString("autor_noticia"));
-                noticia.setDt_publicacao(obj.getString("data_noticia"));
 
+                //List<Imagens> imagensList = new ArrayList<>();
+                Imagens imagens = new Imagens();
+
+
+                Noticia noticia = new Noticia();
+                noticia.setId(obj.getString("id"));
+                noticia.setImagen_capa(obj.getString("imagem_capa"));
+                noticia.setTitulo(obj.getString("titulo"));
+                noticia.setCorpo(obj.getString("corpo"));
+                noticia.setFonte_nm(obj.getString("fonte_nm"));
+                noticia.setDt_publicacao(obj.getString("dt_publicacao"));
+                Log.d("ListaImage", "onPostExecute: " + obj.getString("imagem_capa") );
                 listaNoticia.add(noticia);
+
+
+                /*
+                List<Imagens> imagensList = (List<Imagens>) obj.getJSONArray("imagens");
+                noticia.setImagens(imagensList);
+                Log.d("ListaImage", "onPostExecute: " + imagensList.toString() );
+
+                listaNoticia.add(noticia);*/
+
+
 
 
             } catch (JSONException e) {

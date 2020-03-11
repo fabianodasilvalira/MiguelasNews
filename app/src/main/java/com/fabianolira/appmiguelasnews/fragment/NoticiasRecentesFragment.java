@@ -60,9 +60,8 @@ public class NoticiasRecentesFragment extends Fragment {
     RecyclerView recyclerViewNoticias;
     private NoticiasAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
-    private List<Noticia> listaImagens = new ArrayList<>();
-    private List<Imagens> listaImagens2 = new ArrayList<>();
-    ProgressBar progressBar;
+    private List<Noticia> listaNoticia2 = new ArrayList<>();
+      ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Noticia noticia;
@@ -153,7 +152,7 @@ public class NoticiasRecentesFragment extends Fragment {
             }
         });
 
-        carregarNoticias();
+
         return v;
     }
 
@@ -168,20 +167,31 @@ public class NoticiasRecentesFragment extends Fragment {
                 if (response.isSuccessful()) {
                     listaNoticia = response.body();
                     Noticia noticia = new Noticia();
-                    for (int i = 0; i < listaNoticia.size(); i++) {
-                        Noticia listaNot = listaNoticia.get(i);
+                    Log.d("Imagem capa", "onResponse: ");noticia.getImagen_capa();
+                    /*
+                    for (Noticia news: listaNoticia) {
+                        noticia = news;
+                        noticia.setId(news.getId());
+                        noticia.setTitulo(news.getTitulo());
+                        noticia.setCorpo(news.getCorpo());
+                        noticia.setFonte_nm(news.getFonte_nm());
+                        noticia.setDt_publicacao(news.getDt_publicacao());
 
-                        noticia.setId(listaNot.getId());
+                        List<Imagens> imagensList = new ArrayList<>();
                         Imagens imagens = new Imagens();
+                        imagens.setNome(news.getImagens().get(0).getNome());
+                        imagens.setPath(news.getImagens().get(0).getPath());
+                        imagensList.add(imagens);
 
-
-                        Log.d("Entrou em noticia", "onResponse: " + listaNot.getImagens());
-                        
+                        noticia.setImagens(imagensList);
+                        //Log.d("Entrou ->", "onResponse: " + news.getImagens().get(0).getPath()+news.getImagens().get(0).getNome());
+                        Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
                     }
-
-
+                    */
                 }
-                /*for (int j = 0; j < listaNoticia.size(); j++) {
+
+
+                for (int j = 0; j < listaNoticia.size(); j++) {
                     noticia = listaNoticia.get(j);
 
                     array_noticia.add(noticia.getTitulo());
@@ -207,7 +217,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
                     array_ativo.add(String.valueOf(noticia.getStatus()));
                     str_ativo = array_ativo.toArray(str_ativo);
-                }*/
+                }
 
                 Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
@@ -234,78 +244,6 @@ public class NoticiasRecentesFragment extends Fragment {
             adapter.notifyItemRangeRemoved(0, tamanho);
         }
     }
-
-   /* public class NoticiaTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            return JsonUtils.retornaJsonDeGet(strings[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String json) {
-            super.onPostExecute(json);
-
-            try {
-                JSONArray raiz = new JSONArray(json);
-                String nome = "";
-                for (int i = 0; i < raiz.length(); i++) {
-
-                    JSONObject obj = raiz.getJSONObject(i);
-
-                    Noticia noticia = new Noticia();
-                    noticia.setId_noticias(obj.getInt("id_noticias"));
-                    noticia.setImagem_noticia(obj.getString("image_noticia"));
-                    noticia.setTitulo_noticia(obj.getString("titulo_noticia"));
-                    noticia.setDescricao_noticia(obj.getString("descricao_noticia"));
-                    noticia.setAutor_noticia(obj.getString("autor_noticia"));
-                    noticia.setData_noticia(obj.getString("data_noticia"));
-
-                    Log.d("ListaNoticia", "noticia: " + obj + "\n");
-
-                    listaNoticia.add(noticia);
-
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-            }
-
-            for (int j = 0; j < listaNoticia.size(); j++) {
-                noticia = listaNoticia.get(j);
-
-                array_noticia.add(noticia.getTitulo_noticia());
-                str_noticia = array_noticia.toArray(str_noticia);
-
-                array_id_noticia.add(String.valueOf(noticia.getId_noticias()));
-                str_id_noticia = array_id_noticia.toArray(str_id_noticia);
-
-                array_id_categoria.add(noticia.getId_categoria());
-                str_id_categoria = array_id_categoria.toArray(str_id_categoria);
-
-                array_titulo.add(noticia.getTitulo_noticia());
-                str_titulo = array_titulo.toArray(str_titulo);
-
-                array_imagem.add(noticia.getImagem_noticia());
-                str_imagem = array_imagem.toArray(str_imagem);
-
-                array_autor.add(noticia.getAutor_noticia());
-                str_autor = array_autor.toArray(str_autor);
-
-                array_data.add(noticia.getData_noticia());
-                str_data = array_data.toArray(str_data);
-
-                array_ativo.add(String.valueOf(noticia.getAtivo()));
-                str_ativo = array_ativo.toArray(str_ativo);
-            }
-
-            Collections.reverse(listaNoticia);
-            adapter = new NoticiasAdapter(getActivity(), listaNoticia);
-            recyclerViewNoticias.setAdapter(adapter);
-            dialog.dismiss();
-        }
-    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

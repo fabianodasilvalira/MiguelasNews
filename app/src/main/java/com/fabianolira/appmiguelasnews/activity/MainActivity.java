@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseMessaging.getInstance().subscribeToTopic("Noticias");
+        FirebaseMessaging.getInstance().subscribeToTopic("All");
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
