@@ -7,7 +7,7 @@ public class Categoria implements Serializable {
     private String id;
     private String nome;
     private String id_user;
-    private String imagem_categoria;
+    private String imagem;
     private String dt_in;
     private String dt_up;
 
@@ -17,7 +17,7 @@ public class Categoria implements Serializable {
 
     public Categoria(String nome, String imagem_categoria) {
         this.nome = nome;
-        this.imagem_categoria = imagem_categoria;
+        this.imagem = imagem_categoria;
     }
 
     public String getId() {
@@ -44,12 +44,12 @@ public class Categoria implements Serializable {
         this.id_user = id_user;
     }
 
-    public String getImagem_categoria() {
-        return imagem_categoria;
+    public String getImagem() {
+        return imagem;
     }
 
-    public void setImagem_categoria(String imagem_categoria) {
-        this.imagem_categoria = imagem_categoria;
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public String getDt_in() {

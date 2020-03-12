@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasPorCategoriaAdapter;
+import com.fabianolira.appmiguelasnews.api.NoticiasService;
 import com.fabianolira.appmiguelasnews.fragment.NoticiasRecentesFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
@@ -40,6 +41,11 @@ import java.util.Collections;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CategoriaDetalhesActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNoticias;
@@ -48,6 +54,8 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
+    private Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +91,18 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .build();
             dialog.show();
-             new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia/por-categoria?id=" + Config.ID_CATEGORIA);
-            Log.d("categoria", "onCreate: " + Config.URL_SERVIDOR + "api/noticia/por-categoria?id=" + Config.ID_CATEGORIA);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Config.URL_SERVIDOR)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            carregarNoticias();
 
         } else {
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
-      swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
@@ -98,7 +110,8 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
-                        new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia/por-categoria?id=" + Config.ID_CATEGORIA);
+                        carregarNoticias();
+                        //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia/por-categoria?id=" + Config.ID_CATEGORIA);
                     }
                 }, 1000);
             }
@@ -116,49 +129,33 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
         }
     }
 
-    public class NoticiaTask extends AsyncTask<String, Void, String> {
+    public void carregarNoticias() {
+        NoticiasService service = retrofit.create(NoticiasService.class);
+        Call<List<Noticia>> call = service.recuperarCategoriaId(Config.ID_CATEGORIA);
 
-        @Override
-        protected String doInBackground(String... strings) {
-            return JsonUtils.retornaJsonDeGet(strings[0]);
-        }
 
-        @Override
-        protected void onPostExecute(String json) {
-            super.onPostExecute(json);
-
-            try {
-                JSONArray raiz = new JSONArray(json);
-
-                for (int i = 0; i < raiz.length(); i++) {
-
-                    JSONObject obj = raiz.getJSONObject(i);
-
+        call.enqueue(new Callback<List<Noticia>>() {
+            @Override
+            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                if (response.isSuccessful()) {
+                    listaNoticia = response.body();
                     Noticia noticia = new Noticia();
-                    noticia.setId(obj.getString("id"));
-                    //noticia.setImagen_capa(obj.getString("imagen_capa"));
-                    noticia.setTitulo(obj.getString("titulo"));
-                    noticia.setCorpo(obj.getString("corpo"));
-                    noticia.setFonte_nm(obj.getString("fonte_nm"));
-                    noticia.setDt_publicacao(obj.getString("dt_publicacao"));
-
-                    Log.d("ListaNoticia", "noticia: " + obj + "\n");
-
-                    listaNoticia.add(noticia);
-
+                    Log.d("Categorias id", "onResponse: " + noticia.getImagen_capa());
 
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+                Collections.reverse(listaNoticia);
+                adapter = new NoticiasPorCategoriaAdapter(getApplicationContext(), listaNoticia);
+                recyclerViewNoticias.setAdapter(adapter);
+                dialog.dismiss();
 
             }
 
-            Collections.reverse(listaNoticia);
-            adapter = new NoticiasPorCategoriaAdapter(getApplicationContext(), listaNoticia);
-            recyclerViewNoticias.setAdapter(adapter);
-            dialog.dismiss();
-
-        }
+            @Override
+            public void onFailure(Call<List<Noticia>> call, Throwable t) {
+                Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
+            }
+        });
     }
 
     @Override

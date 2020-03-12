@@ -47,7 +47,7 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        //Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_categoria()).into(holder.imagem);
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem()).into(holder.imagem);
 
         holder.titulo.setText(items.get(position).getNome());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
                 Config.ID_CATEGORIA = categoria.getId();
                 Config.TITULO_CATEGORIA = categoria.getNome();
 
-                //Log.d("categoria", "onClick: " + Config.ID_CATEGORIA + categoria.getNomeCategoria());
+                Log.d("categoria", "onClick: " + Config.ID_CATEGORIA + categoria.getNome());
                 Intent intent = new Intent(context, CategoriaDetalhesActivity.class);
 
                 context.startActivity(intent);

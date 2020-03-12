@@ -61,7 +61,7 @@ public class NoticiasRecentesFragment extends Fragment {
     private NoticiasAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
     private List<Noticia> listaNoticia2 = new ArrayList<>();
-      ProgressBar progressBar;
+    ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Noticia noticia;
@@ -167,11 +167,12 @@ public class NoticiasRecentesFragment extends Fragment {
                 if (response.isSuccessful()) {
                     listaNoticia = response.body();
                     Noticia noticia = new Noticia();
-                    Log.d("Imagem capa", "onResponse: ");noticia.getImagen_capa();
-                    /*
-                    for (Noticia news: listaNoticia) {
+                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
+
+                   /* for (Noticia news: listaNoticia) {
                         noticia = news;
                         noticia.setId(news.getId());
+                        noticia.setImagen_capa(news.getImagen_capa());
                         noticia.setTitulo(news.getTitulo());
                         noticia.setCorpo(news.getCorpo());
                         noticia.setFonte_nm(news.getFonte_nm());
@@ -186,8 +187,10 @@ public class NoticiasRecentesFragment extends Fragment {
                         noticia.setImagens(imagensList);
                         //Log.d("Entrou ->", "onResponse: " + news.getImagens().get(0).getPath()+news.getImagens().get(0).getNome());
                         Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
-                    }
-                    */
+
+
+                    }*/
+
                 }
 
 
@@ -206,8 +209,8 @@ public class NoticiasRecentesFragment extends Fragment {
                     array_titulo.add(noticia.getTitulo());
                     str_titulo = array_titulo.toArray(str_titulo);
 
-                    //array_imagem.add(noticia.getImagen_capa());
-                    //str_imagem = array_imagem.toArray(str_imagem);
+                    array_imagem.add(noticia.getImagen_capa());
+                    str_imagem = array_imagem.toArray(str_imagem);
 
                     array_autor.add(noticia.getFonte_nm());
                     str_autor = array_autor.toArray(str_autor);
@@ -284,7 +287,7 @@ public class NoticiasRecentesFragment extends Fragment {
                         objItem.setCorpo(str_noticia[i]);
                         objItem.setDt_publicacao(str_data[i]);
                         objItem.setFonte_nm(str_autor[i]);
-                        //objItem.setImagen_capa(str_imagem[i]);
+                        objItem.setImagen_capa(str_imagem[i]);
                         objItem.setStatus(str_ativo[i]);
                         listaNoticia.add(objItem);
 

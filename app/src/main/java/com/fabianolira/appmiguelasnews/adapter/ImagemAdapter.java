@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.fabianolira.appmiguelasnews.R;
 
 public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHolder> {
@@ -29,7 +30,7 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
         //holder.nome.setText("Titulo da imagem aqui...");
         holder.imagem.setImageResource(R.drawable.imagem3);
 
-        //Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
+       // Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
 
     }
 

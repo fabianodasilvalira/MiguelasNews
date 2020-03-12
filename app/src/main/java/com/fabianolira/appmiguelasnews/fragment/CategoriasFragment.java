@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -135,8 +136,8 @@ public class CategoriasFragment extends Fragment {
                         Categoria listaCat = listaCategoria.get(i);
 
                         categoria.setNome(listaCat.getNome());
-                        categoria.setImagem_categoria(listaCat.getImagem_categoria());
-                        //Log.d("resultado", "resultado: " + listaCat.getDescricao_categoria());
+                        categoria.setImagem(listaCat.getImagem());
+                        Log.d("resultado", "resultado: " + listaCat.getId() +" - "+ listaCat.getImagem());
                     }
 
                 }
@@ -149,7 +150,7 @@ public class CategoriasFragment extends Fragment {
                     array_nome_categoria.add(categoria.getNome());
                     str_nome_categoria = array_nome_categoria.toArray(str_nome_categoria);
 
-                    array_img_categoria.add(categoria.getImagem_categoria());
+                    array_img_categoria.add(categoria.getImagem());
                     str_img_categoria = array_img_categoria.toArray(str_img_categoria);
 
                 }
@@ -261,7 +262,7 @@ public class CategoriasFragment extends Fragment {
                             Categoria cat = new Categoria();
                             cat.setId(str_id_categoria[i]);
                             cat.setNome(str_nome_categoria[i]);
-                            cat.setImagem_categoria(str_img_categoria[i]);
+                            cat.setImagem(str_img_categoria[i]);
                             listaCategoria.add(cat);
                         }
                     }

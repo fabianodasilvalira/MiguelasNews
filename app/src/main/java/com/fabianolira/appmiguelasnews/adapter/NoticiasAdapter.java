@@ -45,12 +45,10 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagens().get(0).getPath()
-                                     +items.get(position).getImagens().get(0).getNome() ).into(holder.imagem);
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.noticia).into(holder.imagem);
 
 
-        //Log.d("imagemnoticia", "imagem : " + Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagens().get(0).getPath()
-                //+items.get(position).getImagens().get(0).getNome() ).into(holder.imagem));
+        //Log.d("imagemnoticia", "imagem : " + Config.URL_SERVIDOR + items.get(position).getImagen_capa());
 
         holder.titulo.setText(items.get(position).getTitulo());
         holder.data.setText(items.get(position).getDt_publicacao());
@@ -61,8 +59,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 noticia = items.get(position);
                 Log.d("noticia", "onClick: " + position);
-                Config.ID_NOTICIA  = String.valueOf(noticia.getId());
-
+                Config.ID_NOTICIA  = noticia.getId();
+                Log.d("noticia_ID: ", "id: " + noticia.getId());
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

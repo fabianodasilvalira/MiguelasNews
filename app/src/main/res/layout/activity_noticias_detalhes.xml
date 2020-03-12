@@ -27,9 +27,9 @@
                 android:id="@+id/imagemPrincipal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:background="@android:color/white"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/noticialogo" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

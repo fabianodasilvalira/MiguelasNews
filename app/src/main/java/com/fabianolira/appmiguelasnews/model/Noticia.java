@@ -16,17 +16,19 @@ public class Noticia implements Serializable {
     private String dt_publicacao;
     private String status;
     private String imagem_capa;
+    private String imagem_corpo;
     private List<Imagens> imagens;
 
 
     public Noticia() {
     }
 
-    public Noticia(String titulo, String autor, String data, List<Imagens> imagens) {
+    public Noticia(String titulo, String autor, String data, List<Imagens> imagens, String imagem_corpo) {
         this.titulo = titulo;
         this.fonte_nm = autor;
         this.dt_publicacao = data;
         this.imagens = imagens;
+        this.imagem_corpo = imagem_corpo;
     }
 
     public String getId() {
@@ -107,6 +109,22 @@ public class Noticia implements Serializable {
 
     public void setImagens(List<Imagens> imagens) {
         this.imagens = imagens;
+    }
+
+    public String getImagem_capa() {
+        return imagem_capa;
+    }
+
+    public void setImagem_capa(String imagem_capa) {
+        this.imagem_capa = imagem_capa;
+    }
+
+    public String getImagem_corpo() {
+        return imagem_corpo;
+    }
+
+    public void setImagem_corpo(String imagem_corpo) {
+        this.imagem_corpo = imagem_corpo;
     }
 }
 
