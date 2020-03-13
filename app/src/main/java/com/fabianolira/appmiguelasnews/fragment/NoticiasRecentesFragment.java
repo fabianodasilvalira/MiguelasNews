@@ -232,7 +232,7 @@ public class NoticiasRecentesFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Noticia>> call, Throwable t) {
                 Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
+                //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
             }
         });
     }

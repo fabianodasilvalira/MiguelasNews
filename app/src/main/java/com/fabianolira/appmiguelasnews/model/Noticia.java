@@ -23,12 +23,11 @@ public class Noticia implements Serializable {
     public Noticia() {
     }
 
-    public Noticia(String titulo, String autor, String data, List<Imagens> imagens, String imagem_corpo) {
+    public Noticia(String titulo, String autor, String data, String imagem_capa) {
         this.titulo = titulo;
         this.fonte_nm = autor;
         this.dt_publicacao = data;
-        this.imagens = imagens;
-        this.imagem_corpo = imagem_corpo;
+        this.imagem_capa = imagem_capa;
     }
 
     public String getId() {

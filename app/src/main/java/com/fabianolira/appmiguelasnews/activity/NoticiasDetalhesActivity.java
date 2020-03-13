@@ -158,8 +158,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                     populaDados();
                     //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
-
-
                         /*List<Imagens> imagensList = new ArrayList<>();
                         Imagens imagens = new Imagens();
                         imagens.setNome(news.getImagens().get(0).getNome());
@@ -172,14 +170,13 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
                          */
 
-
                 }
             }
 
             @Override
             public void onFailure(Call<Noticia> call, Throwable t) {
 
-                Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
+                //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
             }
         });
     }
@@ -198,7 +195,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagen_capa()).into(imgPrincipal);
         //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_corpo()).into(imgCorpoNoticia);
 
-        Log.d("imagem_Image", "populaDados: " + Config.URL_SERVIDOR + noticia.getImagen_capa()+"/");
+        Log.d("imagem_Image", "populaDados: " + Config.URL_SERVIDOR + noticia.getImagen_capa());
         dialog.dismiss();
         /* WebSettings webSettings = webDescricao.getSettings();
         Resources res = getResources();

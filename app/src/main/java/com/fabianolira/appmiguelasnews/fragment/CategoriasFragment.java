@@ -137,7 +137,7 @@ public class CategoriasFragment extends Fragment {
 
                         categoria.setNome(listaCat.getNome());
                         categoria.setImagem(listaCat.getImagem());
-                        Log.d("resultado", "resultado: " + listaCat.getId() +" - "+ listaCat.getImagem());
+                        //Log.d("resultado", "resultado: " + listaCat.getId() +" - "+ listaCat.getImagem());
                     }
 
                 }

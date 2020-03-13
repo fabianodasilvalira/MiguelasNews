@@ -55,11 +55,11 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
             public void onClick(View view) {
 
                 categoria = items.get(position);
-                Log.d("categoria", "onClick: " + position);
+
                 Config.ID_CATEGORIA = categoria.getId();
                 Config.TITULO_CATEGORIA = categoria.getNome();
 
-                Log.d("categoria", "onClick: " + Config.ID_CATEGORIA + categoria.getNome());
+                Log.d("IDCATEGORIA", "onClick: " + Config.ID_CATEGORIA );
                 Intent intent = new Intent(context, CategoriaDetalhesActivity.class);
 
                 context.startActivity(intent);
