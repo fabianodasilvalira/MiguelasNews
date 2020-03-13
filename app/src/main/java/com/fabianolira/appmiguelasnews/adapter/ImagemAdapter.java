@@ -20,17 +20,17 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View itemLista = LayoutInflater.from(parent.getContext())
-               .inflate(R.layout.imagem_detalhe, parent, false);
-       return new MyViewHolder(itemLista);
+        View itemLista = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.imagem_detalhe, parent, false);
+        return new MyViewHolder(itemLista);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //holder.nome.setText("Titulo da imagem aqui...");
-        holder.imagem.setImageResource(R.drawable.imagem3);
+        holder.imagem.setImageResource(R.drawable.logonews);
 
-       // Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
+        // Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
 
     }
 
@@ -40,8 +40,8 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
         return 3;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-       // private TextView nome;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        // private TextView nome;
         private ImageView imagem;
 
         public MyViewHolder(@NonNull View itemView) {

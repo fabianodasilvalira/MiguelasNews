@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface NoticiasService {
 
@@ -21,6 +22,10 @@ public interface NoticiasService {
 
     @GET("api/noticia/por-categoria/{id}")
     Call<List<Noticia>> recuperarCategoriaId(@Path("id") String id);
+
+    @GET("api/noticia/por-categoria")
+    Call<List<Noticia>> recuperarCategoriaId2(@Query("id") String id);
+
 
 
 

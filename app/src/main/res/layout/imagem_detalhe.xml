@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="6dp">
+    android:layout_height="wrap_content">
 
 
     <ImageView
@@ -13,7 +12,9 @@
         android:layout_height="200dp"
         android:layout_gravity="center|center_horizontal|center_vertical"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/imagens_noticias"
         android:layout_marginBottom="22dp"
+        app:srcCompat="@drawable/logonews"
         android:scaleType="centerCrop" />
 
 </androidx.cardview.widget.CardView>

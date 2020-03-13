@@ -8,16 +8,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.fragment.TabFragment;
+import com.fabianolira.appmiguelasnews.json.JsonUtils;
+import com.fabianolira.appmiguelasnews.util.Config;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import dmax.dialog.SpotsDialog;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
 
+        if (JsonUtils.estaconectado(getApplicationContext())) {
+            Toast.makeText(getApplicationContext(), "conectado com a internet", Toast.LENGTH_SHORT).show();
+
+
+            //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+            //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
+
+
+        } else {
+            Log.d("Sem conexao", "onCreateView: ");
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

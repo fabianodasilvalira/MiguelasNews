@@ -80,20 +80,14 @@ public class CategoriasFragment extends Fragment {
 
 
         if (JsonUtils.estaconectado(getContext())) {
-         /*   dialog = new SpotsDialog.Builder()
-                    .setContext(getContext())
-                    .setMessage("Carregando categorias!")
-                    .setCancelable(false)
-                    .build();
-            dialog.show();*/
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(Config.URL_SERVIDOR)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
+            carregarCategorias();
 
-            //Log.d("baseId", "onCreateView: "+ "asdfasdfasdf");
-            //new CategoriaTask().execute(Config.URL_SERVIDOR + "api/categoria");
 
         } else {
             Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
@@ -108,14 +102,14 @@ public class CategoriasFragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
                         carregarCategorias();
-                        //new CategoriaTask().execute(Config.URL_SERVIDOR + "api/categoria");
+
                     }
                 }, 2000);
             }
         });
 
 
-        carregarCategorias();
+
 
         return v;
     }

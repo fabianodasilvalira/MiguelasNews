@@ -25,7 +25,7 @@ import java.util.List;
 
 public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
-    private  List<Noticia> items;
+    private List<Noticia> items;
     private Context context;
     private Noticia noticia;
 
@@ -45,7 +45,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.noticia).into(holder.imagem);
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.logonews).into(holder.imagem);
 
 
         //Log.d("imagemnoticia", "imagem : " + Config.URL_SERVIDOR + items.get(position).getImagen_capa());
@@ -59,7 +59,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
                 noticia = items.get(position);
                 Log.d("noticia", "onClick: " + position);
-                Config.ID_NOTICIA  = noticia.getId();
+                Config.ID_NOTICIA = noticia.getId();
                 Log.d("noticia_ID: ", "id: " + noticia.getId());
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -75,7 +75,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         return items.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imagem;
         public TextView titulo, data, autor;
