@@ -50,17 +50,25 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         //Log.d("imagemnoticia", "imagem : " + Config.URL_SERVIDOR + items.get(position).getImagen_capa());
 
-        holder.titulo.setText(items.get(position).getTitulo());
-        holder.data.setText(items.get(position).getDt_publicacao());
-        holder.autor.setText(items.get(position).getFonte_nm());
+        final Noticia noticia = items.get(position);
+        holder.titulo.setText(noticia.getTitulo());
+        holder.data.setText(noticia.getDt_publicacao());
+        holder.autor.setText(noticia.getFonte_nm());
+
+        Log.i("INFO ADAPTER OFLINE: ", " : "
+                + items.get(position).getId() + " / "
+                + items.get(position).getTitulo() + " / "
+                + items.get(position).getCorpo() + " / "
+                + items.get(position).getImagem_capa()+ " / "
+                + items.get(position).getFonte_nm()+ " / "
+                + items.get(position).getDt_publicacao());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                noticia = items.get(position);
-                Log.d("noticia", "onClick: " + position);
+
                 Config.ID_NOTICIA = noticia.getId();
-                Log.d("noticia_ID: ", "id: " + noticia.getId());
+
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

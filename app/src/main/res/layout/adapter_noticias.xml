@@ -29,6 +29,7 @@
                 android:id="@+id/imageNoticia"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:contentDescription="@string/imagens_noticias"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="10dp"
                 android:scaleType="centerCrop" />
@@ -44,10 +45,10 @@
                 <TextView
                     android:id="@+id/textNoticiasRecentes"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:maxLines="2"
-                    android:text="Levando a informação correta, onde você estiver!"
+                    android:text="@string/bordao_miguelasNews"
                     android:textColor="@color/textoPrimario"
                     android:textSize="14sp" />
 
@@ -64,14 +65,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="Autor: "
-                            android:textSize="10dp" />
+                            android:text="@string/autor"
+                            android:textSize="10sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="left"
+                        android:gravity="start"
                         android:orientation="horizontal">
 
                         <TextView
@@ -81,7 +82,7 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginBottom="3dp"
                             android:fadeScrollbars="false"
-                            android:text="Autor: Fabiano da Silva Lira"
+                            android:text="@string/autor_noticia_adapter"
                             android:textColor="@color/textoSecundario"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -96,11 +97,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:layout_marginTop="3dp"
                             android:layout_marginBottom="3dp"
                             android:fadeScrollbars="false"
-                            android:gravity="right"
-                            android:text="Data: 12/10/2019"
+                            android:gravity="end"
+                            android:text="@string/data_adapter"
                             android:textColor="@color/textoSecundario"
                             android:textSize="10sp" />
                     </LinearLayout>

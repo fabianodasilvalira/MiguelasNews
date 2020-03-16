@@ -2,6 +2,9 @@ package com.fabianolira.appmiguelasnews.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,10 +29,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
+import com.fabianolira.appmiguelasnews.helper.DbHelper;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.model.Imagens;
@@ -40,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLClientInfoException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -128,11 +134,28 @@ public class NoticiasRecentesFragment extends Fragment {
 
             carregarNoticias();
 
+
+
             //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
             //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
 
 
         } else {
+
+            NoticiaDAO noticiaDAO = new NoticiaDAO(getActivity());
+
+            listaNoticia2 = noticiaDAO.listar();
+
+            for(int i = 0;i>listaNoticia2.size();i++){
+                Log.i("INFO LISTAGEM", "-->> ");
+                System.out.println(listaNoticia2.get(i));}
+
+
+
+
+            adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
+            recyclerViewNoticias.setAdapter(adapter);
+
             Log.d("Sem conexao", "onCreateView: ");
             Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
@@ -156,6 +179,8 @@ public class NoticiasRecentesFragment extends Fragment {
         return v;
     }
 
+
+
     public void carregarNoticias() {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarNoticia();
@@ -169,27 +194,36 @@ public class NoticiasRecentesFragment extends Fragment {
                     Noticia noticia = new Noticia();
                     //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
-                   /* for (Noticia news: listaNoticia) {
+
+                    NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
+
+
+                     for (Noticia news: listaNoticia) {
                         noticia = news;
                         noticia.setId(news.getId());
-                        noticia.setImagen_capa(news.getImagen_capa());
                         noticia.setTitulo(news.getTitulo());
-                        noticia.setCorpo(news.getCorpo());
+                        //noticia.setCorpo(news.getCorpo());
+                        //noticia.setImagen_capa(news.getImagen_capa());
                         noticia.setFonte_nm(news.getFonte_nm());
                         noticia.setDt_publicacao(news.getDt_publicacao());
 
-                        List<Imagens> imagensList = new ArrayList<>();
+                         //Log.e("INFO peg", "onResponse: " + noticia );
+
+                         noticiaDAO.salvar(noticia);
+
+                        /*List<Imagens> imagensList = new ArrayList<>();
                         Imagens imagens = new Imagens();
                         imagens.setNome(news.getImagens().get(0).getNome());
                         imagens.setPath(news.getImagens().get(0).getPath());
-                        imagensList.add(imagens);
+                        */
 
-                        noticia.setImagens(imagensList);
+
+                        //noticia.setImagens(imagensList);
                         //Log.d("Entrou ->", "onResponse: " + news.getImagens().get(0).getPath()+news.getImagens().get(0).getNome());
-                        Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
+                       // Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
 
 
-                    }*/
+                    }
 
                 }
 
@@ -197,7 +231,7 @@ public class NoticiasRecentesFragment extends Fragment {
                 for (int j = 0; j < listaNoticia.size(); j++) {
                     noticia = listaNoticia.get(j);
 
-                    array_noticia.add(noticia.getTitulo());
+                    array_noticia.add(noticia.getCorpo());
                     str_noticia = array_noticia.toArray(str_noticia);
 
                     array_id_noticia.add(String.valueOf(noticia.getId()));
@@ -227,6 +261,7 @@ public class NoticiasRecentesFragment extends Fragment {
                 recyclerViewNoticias.setAdapter(adapter);
                 dialog.dismiss();
 
+
             }
 
             @Override
@@ -236,6 +271,7 @@ public class NoticiasRecentesFragment extends Fragment {
             }
         });
     }
+
 
     public void limpa() {
         int tamanho = this.listaNoticia.size();

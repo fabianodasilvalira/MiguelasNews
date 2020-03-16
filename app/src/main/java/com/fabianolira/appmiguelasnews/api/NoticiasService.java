@@ -23,10 +23,4 @@ public interface NoticiasService {
     @GET("api/noticia/por-categoria/{id}")
     Call<List<Noticia>> recuperarCategoriaId(@Path("id") String id);
 
-    @GET("api/noticia/por-categoria")
-    Call<List<Noticia>> recuperarCategoriaId2(@Query("id") String id);
-
-
-
-
 }

@@ -109,8 +109,6 @@ public class CategoriasFragment extends Fragment {
         });
 
 
-
-
         return v;
     }
 

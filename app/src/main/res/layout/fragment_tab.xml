@@ -12,7 +12,6 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="6dp"
         android:background="@color/colorPrimary"
         app:tabIndicatorColor="#ffffff"
         app:tabGravity="fill"
