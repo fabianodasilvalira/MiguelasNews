@@ -118,8 +118,13 @@ public class NoticiasRecentesFragment extends Fragment {
         str_ativo = new String[array_ativo.size()];
 
 
-        if (JsonUtils.estaconectado(getContext())) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Config.URL_SERVIDOR)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        if (JsonUtils.estaconectado(getContext())) {
+            Toast.makeText(getContext(), "Conectado a internet", Toast.LENGTH_SHORT).show();
             dialog = new SpotsDialog.Builder()
                     .setContext(getContext())
                     .setMessage("Carregando as noticias, Aguarde!")
@@ -127,14 +132,26 @@ public class NoticiasRecentesFragment extends Fragment {
                     .build();
             dialog.show();
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.URL_SERVIDOR)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                            limpa();
+                            if (JsonUtils.estaconectado(getContext())) {
+                                carregarNoticiasOnline();
+                            } else {
+                                carregarNoticiasOfline();
+                            }
+                            // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+                        }
+                    }, 2000);
+                }
+            });
 
-            carregarNoticias();
-
-
+            carregarNoticiasOnline();
 
             //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
             //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
@@ -142,24 +159,31 @@ public class NoticiasRecentesFragment extends Fragment {
 
         } else {
 
-            NoticiaDAO noticiaDAO = new NoticiaDAO(getActivity());
+            carregarNoticiasOfline();
 
-            listaNoticia2 = noticiaDAO.listar();
-
-            for(int i = 0;i>listaNoticia2.size();i++){
-                Log.i("INFO LISTAGEM", "-->> ");
-                System.out.println(listaNoticia2.get(i));}
-
-
-
-
-            adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
-            recyclerViewNoticias.setAdapter(adapter);
-
-            Log.d("Sem conexao", "onCreateView: ");
-            Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
+
+        return v;
+    }
+
+    public void carregarNoticiasOfline() {
+
+        NoticiaDAO noticiaDAO = new NoticiaDAO(getActivity());
+
+        listaNoticia2 = noticiaDAO.listar();
+
+        for (int i = 0; i > listaNoticia2.size(); i++) {
+            Log.i("INFO LISTAGEM", "-->> ");
+            System.out.println(listaNoticia2.get(i));
+        }
+
+        Collections.reverse(listaNoticia2);
+        adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
+        recyclerViewNoticias.setAdapter(adapter);
+
+        Log.d("Sem conexao", "onCreateView: ");
+        Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -168,20 +192,20 @@ public class NoticiasRecentesFragment extends Fragment {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
-                        carregarNoticias();
+                        if (JsonUtils.estaconectado(getContext())) {
+                            carregarNoticiasOnline();
+                        } else {
+                            carregarNoticiasOfline();
+                        }
                         // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
                     }
                 }, 2000);
             }
         });
-
-
-        return v;
     }
 
 
-
-    public void carregarNoticias() {
+    public void carregarNoticiasOnline() {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarNoticia();
 
@@ -198,31 +222,10 @@ public class NoticiasRecentesFragment extends Fragment {
                     NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
 
 
-                     for (Noticia news: listaNoticia) {
+                    for (Noticia news : listaNoticia) {
                         noticia = news;
-                        noticia.setId(news.getId());
-                        noticia.setTitulo(news.getTitulo());
-                        //noticia.setCorpo(news.getCorpo());
-                        //noticia.setImagen_capa(news.getImagen_capa());
-                        noticia.setFonte_nm(news.getFonte_nm());
-                        noticia.setDt_publicacao(news.getDt_publicacao());
 
-                         //Log.e("INFO peg", "onResponse: " + noticia );
-
-                         noticiaDAO.salvar(noticia);
-
-                        /*List<Imagens> imagensList = new ArrayList<>();
-                        Imagens imagens = new Imagens();
-                        imagens.setNome(news.getImagens().get(0).getNome());
-                        imagens.setPath(news.getImagens().get(0).getPath());
-                        */
-
-
-                        //noticia.setImagens(imagensList);
-                        //Log.d("Entrou ->", "onResponse: " + news.getImagens().get(0).getPath()+news.getImagens().get(0).getNome());
-                       // Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
-
-
+                        noticiaDAO.salvar(noticia);
                     }
 
                 }
@@ -260,7 +263,6 @@ public class NoticiasRecentesFragment extends Fragment {
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
                 recyclerViewNoticias.setAdapter(adapter);
                 dialog.dismiss();
-
 
             }
 

@@ -21,19 +21,19 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sqlNoticia = "CREATE TABLE IF NOT EXISTS " + TABELA_NOTICIAS
-                             + " (id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                             + " (id_sqlite INTEGER PRIMARY KEY AUTOINCREMENT,"
+                             + " id TEXT NOT NULL,  "
                              + " titulo TEXT NOT NULL,  "
                              + " corpo TEXT NOT NULL, "
-                             + " dt_publicacao TEXT NOT NULL,  "
-                             + " fonte_nm TEXT NOT NULL, "
-                             + " imagen_capa TEXT NOT NULL ) ";
+                             + " dt_publicacao TEXT NOT NULL, "
+                             + " fonte_nm TEXT NOT NULL ) ";
 
         try{
 
             db.execSQL(sqlNoticia);
-            //Log.i("Info Db", "Sucesso ao criar a tabela: " + sqlNoticia);
+            Log.i("INFORMACAO CRIA BD", "Sucesso ao criar a tabela: " + sqlNoticia);
         }catch (Exception e){
-            Log.i("Info Db", "Erro ao criar a tabela: " + e.getMessage());
+            //Log.i("Info Db", "Erro ao criar a tabela: " + e.getMessage());
         }
 
     }

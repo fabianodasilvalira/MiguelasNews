@@ -3,6 +3,7 @@ package com.fabianolira.appmiguelasnews.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
+import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
@@ -45,8 +47,11 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.logonews).into(holder.imagem);
+        if (JsonUtils.estaconectado(context)) {
+            Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.logonews).into(holder.imagem);
+        }else{
 
+        }
 
         //Log.d("imagemnoticia", "imagem : " + Config.URL_SERVIDOR + items.get(position).getImagen_capa());
 
@@ -55,13 +60,13 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.data.setText(noticia.getDt_publicacao());
         holder.autor.setText(noticia.getFonte_nm());
 
-        Log.i("INFO ADAPTER OFLINE: ", " : "
+        /*Log.i("INFO ADAPTER OFLINE: ", " : "
                 + items.get(position).getId() + " / "
                 + items.get(position).getTitulo() + " / "
                 + items.get(position).getCorpo() + " / "
                 + items.get(position).getImagem_capa()+ " / "
                 + items.get(position).getFonte_nm()+ " / "
-                + items.get(position).getDt_publicacao());
+                + items.get(position).getDt_publicacao());*/
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +90,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imagem;
+        public ImageView imagem, imagemOfline;
         public TextView titulo, data, autor;
         public LinearLayout linearLayout;
 
@@ -93,6 +98,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             super(itemView);
 
             imagem = itemView.findViewById(R.id.imageNoticia);
+            imagemOfline = itemView.findViewById(R.id.imageNoticia);
             titulo = itemView.findViewById(R.id.textNoticiasRecentes);
             autor = itemView.findViewById(R.id.autorNoticia);
             data = itemView.findViewById(R.id.dataNoticia);

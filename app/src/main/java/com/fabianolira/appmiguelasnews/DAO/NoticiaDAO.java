@@ -30,18 +30,18 @@ public class NoticiaDAO implements INoticiaDAO {
         cv.put("corpo", noticia.getCorpo());
         cv.put("dt_publicacao", noticia.getDt_publicacao());
         cv.put("fonte_nm", noticia.getFonte_nm());
-        cv.put("imagen_capa", noticia.getImagem_capa());
+        //cv.put("imagen_capa", noticia.getImagem_capa());
 
         try{
             escreve.insert(DbHelper.TABELA_NOTICIAS, null, cv);
-           /* Log.i("INFO teste", "Sucesso ao salvar:  "
-                    + noticia.getId()
-                    + noticia.getTitulo()
-                   // + noticia.getImagem_capa()
+            Log.i("INFORMA", "Sucesso ao salvar:  "
+                    + noticia.getId() + "  -  "
+                    //+ noticia.getTitulo()
+                   // + noticia.getCorpo()
                     + noticia.getDt_publicacao()
-                    + noticia.getFonte_nm());*/
+                    + noticia.getFonte_nm());
         }catch (Exception e){
-            Log.e("INFO", "Erro ao salvar: " + e.getMessage());
+            Log.e("INFORMA", "Erro ao salvar: " + e.getMessage());
             return false;
         }
 
@@ -67,32 +67,28 @@ public class NoticiaDAO implements INoticiaDAO {
        Cursor c = le.rawQuery(sql, null);
 
         while (c.moveToNext()){
-            //Log.i("INFO LISTAR2", "listar: " + sql);
 
             Noticia noticiaObj = new Noticia();
 
             String id = c.getString(c.getColumnIndex("id"));
             String titulo = c.getString(c.getColumnIndex("titulo"));
-            String corpo = c.getString(c.getColumnIndex("corpo"));
+            //String corpo = c.getString(c.getColumnIndex("corpo"));
             String dt_publicacao = c.getString(c.getColumnIndex("dt_publicacao"));
             String fonte_nm = c.getString(c.getColumnIndex("fonte_nm"));
             //String imagem_capa = c.getString(c.getColumnIndex("imagem_capa"));
 
             noticiaObj.setId(id);
             noticiaObj.setTitulo(titulo);
-            noticiaObj.setCorpo(corpo);
+            //noticiaObj.setCorpo(corpo);
             noticiaObj.setDt_publicacao(dt_publicacao);
             noticiaObj.setFonte_nm(fonte_nm);
             //noticiaObj.setImagem_capa(imagem_capa);
-            Log.i("INFO LISTAR", "->>: "
-                    + id + " / "
-                    + corpo );
 
             noticiasList.add(noticiaObj);
 
             for (int i = 0; i < noticiasList.size(); i++) {
 
-                Log.i("INFO LISTAR LISTA", "->>: "+noticiasList.get(i).getDt_publicacao());
+                //Log.i("INFORMA LISTAR LISTA", "->>: "+ noticiasList.get(i).getDt_publicacao());
 
             }
 

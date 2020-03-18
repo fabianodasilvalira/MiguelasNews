@@ -32,6 +32,7 @@
                 android:contentDescription="@string/imagens_noticias"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="10dp"
+                app:srcCompat="@drawable/logonews"
                 android:scaleType="centerCrop" />
 
 

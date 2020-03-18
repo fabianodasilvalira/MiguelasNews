@@ -64,18 +64,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
 
-        if (JsonUtils.estaconectado(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(), "conectado com a internet", Toast.LENGTH_SHORT).show();
-
-
-            //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
-            //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
-
-
-        } else {
-            Log.d("Sem conexao", "onCreateView: ");
-            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
-        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
