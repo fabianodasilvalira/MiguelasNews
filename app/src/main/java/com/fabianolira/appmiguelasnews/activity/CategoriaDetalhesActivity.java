@@ -144,12 +144,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
                     Noticia noticia = new Noticia();
                     Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
-
-
                 }
-
-
-
 
                 Collections.reverse(listaNoticia);
                 adapter = new NoticiasPorCategoriaAdapter(getApplicationContext(), listaNoticia);

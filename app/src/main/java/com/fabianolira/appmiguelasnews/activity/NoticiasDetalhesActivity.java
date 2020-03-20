@@ -19,10 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.ImagemAdapter;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
+import com.fabianolira.appmiguelasnews.fragment.NoticiasRecentesFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Imagens;
 import com.fabianolira.appmiguelasnews.model.Noticia;
@@ -47,7 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     private ImageView imgPrincipal, imgCorpoNoticia;
-    private TextView txtTitulo, txtData, txtAutor, webDescricao;
+    private TextView txtTitulo, txtData, txtAutor, webDescricao, urlNoticia;
     LinearLayout linearLayout;
     private RecyclerView recyclerImagens;
 
@@ -76,7 +78,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
         //Definir Layout
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerImagens.setLayoutManager(layoutManager);
         //definir adaptador
         ImagemAdapter adapter = new ImagemAdapter();
@@ -93,16 +95,23 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean estaMostrando = false;
             int scrollRange = -1;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(scrollRange==-1){
+                if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if(scrollRange + verticalOffset == 0){
-                    collapsingToolbarLayout.setTitle(noticia.getTitulo());
+                if (scrollRange + verticalOffset == 0) {
+                    if (JsonUtils.estaconectado(getApplicationContext())) {
+                        collapsingToolbarLayout.setTitle(noticia.getTitulo());
+
+                    }else{
+                        collapsingToolbarLayout.setTitle("");
+
+                    }
                     estaMostrando = true;
 
-                }else{
+                } else {
                     collapsingToolbarLayout.setTitle("");
                     estaMostrando = false;
                 }
@@ -116,12 +125,19 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         // imgFavorito = findViewById(R.id.)
 
         txtTitulo = findViewById(R.id.textTituloDetalhes);
+        urlNoticia = findViewById(R.id.urlNoticia);
         txtAutor = findViewById(R.id.textAutor);
         txtData = findViewById(R.id.textDataDetalheso);
         webDescricao = findViewById(R.id.webDescricao);
         imgPrincipal = findViewById(R.id.imagemPrincipal);
         imgCorpoNoticia = findViewById(R.id.imagemDetalhe);
         listaNoticia = new ArrayList<Noticia>();
+
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Config.URL_SERVIDOR)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         if (JsonUtils.estaconectado(getApplicationContext())) {
             dialog = new SpotsDialog.Builder()
@@ -130,25 +146,43 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .build();
             dialog.show();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.URL_SERVIDOR)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+
 
             carregarNoticias();
             //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
         } else {
+
+            carregarNoticiaOfline();
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    public void carregarNoticiaOfline(){
 
+        NoticiaDAO noticiaDAO = new NoticiaDAO(getApplicationContext());
+
+        listaNoticia = noticiaDAO.listarNoticia();
+
+
+        txtTitulo.setText(listaNoticia.get(0).getTitulo());
+        urlNoticia.setText(listaNoticia.get(0).getFonte_url());
+        webDescricao.setText(listaNoticia.get(0).getCorpo());
+        txtData.setText(listaNoticia.get(0).getDt_publicacao());
+        txtAutor.setText(listaNoticia.get(0).getFonte_nm());
+
+
+        /*Log.i("Testando", "carregarNoticiaOfline: "
+                + listaNoticia.get(0).getTitulo()
+                + listaNoticia.get(0).getCorpo()
+                + listaNoticia.get(0).getDt_publicacao()
+                + listaNoticia.get(0).getFonte_nm());*/
+
+    }
 
     public void carregarNoticias() {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<Noticia> call = service.recuperarNoticiaId(Config.ID_NOTICIA);
-
 
         call.enqueue(new Callback<Noticia>() {
             @Override
@@ -156,37 +190,20 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     noticia = response.body();
                     populaDados();
-                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
-
-                        /*List<Imagens> imagensList = new ArrayList<>();
-                        Imagens imagens = new Imagens();
-                        imagens.setNome(news.getImagens().get(0).getNome());
-                        imagens.setPath(news.getImagens().get(0).getPath());
-                        imagensList.add(imagens);
-
-                        noticia.setImagens(imagensList);
-                        //Log.d("Entrou ->", "onResponse: " + news.getImagens().get(0).getPath()+news.getImagens().get(0).getNome());
-                        Log.d("Entrou ->", "onResponse: " + noticia.getImagens().get(0).getPath()+noticia.getImagens().get(0).getNome());
-
-                         */
-
                 }
             }
 
             @Override
             public void onFailure(Call<Noticia> call, Throwable t) {
 
-                //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
             }
         });
     }
 
     public void populaDados() {
 
-
-        //Log.d("listaNoticia", "populaDados: " + noticia);
-
         txtTitulo.setText(noticia.getTitulo());
+        urlNoticia.setText("Url da noticia: " + noticia.getFonte_url());
         txtData.setText(noticia.getDt_publicacao());
         txtAutor.setText(noticia.getFonte_nm());
         webDescricao.setText(noticia.getCorpo());
@@ -197,22 +214,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         Log.d("imagem_Image", "populaDados: " + Config.URL_SERVIDOR + noticia.getImagen_capa());
         dialog.dismiss();
-        /* WebSettings webSettings = webDescricao.getSettings();
-        Resources res = getResources();
-        int tamFont = 20;
-        webSettings.setJavaScriptEnabled(true);
-        String mimeType = "text/html; charset=UTF8";
-        String encoding = "utf-8";
-        String textoHtml = noticia.getDescricao_noticia();
-        String estrutura =
-                "<html><head>"
-                + "<style type=\"text/css\">body{color: #525252;}"
-                + "</style></head>"
-                + "<body>"
-                + textoHtml
-                + "</body></html>";
-        webDescricao.loadData(estrutura, mimeType, encoding);
-        Log.d("popula dados", "populaDados: " + textoHtml);*/
 
     }
 
@@ -223,7 +224,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;

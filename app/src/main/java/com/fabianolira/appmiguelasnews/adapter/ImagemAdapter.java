@@ -37,7 +37,7 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 0;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

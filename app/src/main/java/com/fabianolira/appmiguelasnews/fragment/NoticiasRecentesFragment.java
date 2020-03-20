@@ -125,31 +125,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
         if (JsonUtils.estaconectado(getContext())) {
             Toast.makeText(getContext(), "Conectado a internet", Toast.LENGTH_SHORT).show();
-            dialog = new SpotsDialog.Builder()
-                    .setContext(getContext())
-                    .setMessage("Carregando as noticias, Aguarde!")
-                    .setCancelable(false)
-                    .build();
-            dialog.show();
 
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                            limpa();
-                            if (JsonUtils.estaconectado(getContext())) {
-                                carregarNoticiasOnline();
-                            } else {
-                                carregarNoticiasOfline();
-                            }
-                            // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
-                        }
-                    }, 2000);
-                }
-            });
 
             carregarNoticiasOnline();
 
@@ -163,24 +139,50 @@ public class NoticiasRecentesFragment extends Fragment {
 
         }
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        limpa();
+                        if (JsonUtils.estaconectado(getContext())) {
+                            carregarNoticiasOnline();
+                        } else {
+                            carregarNoticiasOfline();
+                        }
+                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+                    }
+                }, 2000);
+            }
+        });
 
         return v;
     }
 
     public void carregarNoticiasOfline() {
+        dialog = new SpotsDialog.Builder()
+                .setContext(getContext())
+                .setMessage("Carregando noticias, Aguarde!")
+                .setCancelable(false)
+                .build();
+        dialog.show();
 
         NoticiaDAO noticiaDAO = new NoticiaDAO(getActivity());
 
         listaNoticia2 = noticiaDAO.listar();
 
         for (int i = 0; i > listaNoticia2.size(); i++) {
-            Log.i("INFO LISTAGEM", "-->> ");
-            System.out.println(listaNoticia2.get(i));
+            Log.i("LISTAGEM", "-->> " + listaNoticia2.get(i));
+
         }
 
         Collections.reverse(listaNoticia2);
         adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
         recyclerViewNoticias.setAdapter(adapter);
+
+        dialog.dismiss();
 
         Log.d("Sem conexao", "onCreateView: ");
         Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
@@ -206,6 +208,14 @@ public class NoticiasRecentesFragment extends Fragment {
 
 
     public void carregarNoticiasOnline() {
+
+        dialog = new SpotsDialog.Builder()
+                .setContext(getContext())
+                .setMessage("Carregando noticias, Aguarde!")
+                .setCancelable(false)
+                .build();
+        dialog.show();
+
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarNoticia();
 
@@ -268,7 +278,8 @@ public class NoticiasRecentesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Noticia>> call, Throwable t) {
-                Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Erro ao se conectar com o servidor.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
             }
         });

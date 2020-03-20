@@ -161,6 +161,17 @@
                     android:text=""
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/urlNoticia"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/textoSecundario"
+                    android:text=""
+                    android:textSize="12sp" />
+
                 <!-- <WebView
                     android:id="@+id/webDescricao"
                     android:layout_width="match_parent"

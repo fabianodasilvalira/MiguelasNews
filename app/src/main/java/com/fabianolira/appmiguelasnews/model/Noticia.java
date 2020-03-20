@@ -8,6 +8,7 @@ import java.util.List;
 public class Noticia implements Serializable {
 
     private String id;
+    private int id_sqlite;
     private String id_categoria;
     private String titulo;
     private String corpo;
@@ -37,6 +38,14 @@ public class Noticia implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getId_sqlite() {
+        return id_sqlite;
+    }
+
+    public void setId_sqlite(int id_sqlite) {
+        this.id_sqlite = id_sqlite;
     }
 
     public String getId_categoria() {

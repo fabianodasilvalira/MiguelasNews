@@ -9,4 +9,5 @@ public interface INoticiaDAO {
     public boolean atualizar(Noticia noticia);
     public boolean deletar(Noticia noticia);
     public List<Noticia> listar();
+    public List<Noticia> listarNoticia();
 }

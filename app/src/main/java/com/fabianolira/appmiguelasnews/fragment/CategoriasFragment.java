@@ -23,14 +23,18 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.fabianolira.appmiguelasnews.DAO.CategoriaDAO;
+import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.CategoriasAdapter;
+import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.util.Config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,20 +82,26 @@ public class CategoriasFragment extends Fragment {
         str_nome_categoria = new String[array_nome_categoria.size()];
         str_img_categoria = new String[array_img_categoria.size()];
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Config.URL_SERVIDOR)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
 
         if (JsonUtils.estaconectado(getContext())) {
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.URL_SERVIDOR)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            carregarCategorias();
-
+            carregarCategoriasOnline();
 
         } else {
-            Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+
+            carregarCategoriasOfline();
+
         }
+
+        return v;
+    }
+
+    public void carregarCategoriasOfline() {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -101,18 +111,52 @@ public class CategoriasFragment extends Fragment {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         limpa();
-                        carregarCategorias();
-
+                        if (JsonUtils.estaconectado(getContext())) {
+                            carregarCategoriasOnline();
+                        } else {
+                            carregarCategoriasOfline();
+                        }
+                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
                     }
                 }, 2000);
             }
         });
 
 
-        return v;
+        CategoriaDAO categoriaDAO = new CategoriaDAO(getActivity());
+
+        listaCategoria = categoriaDAO.listar();
+
+        for (int i = 0; i > listaCategoria.size(); i++) {
+            Log.i("LISTAGEM", "-->> " + listaCategoria.get(i));
+
+        }
+
+        adapter = new CategoriasAdapter(listaCategoria, getActivity());
+        recyclerViewCategoria.setAdapter(adapter);
+
     }
 
-    public void carregarCategorias() {
+    public void carregarCategoriasOnline() {
+        
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        limpa();
+                        if (JsonUtils.estaconectado(getContext())) {
+                            carregarCategoriasOnline();
+                        } else {
+                            carregarCategoriasOfline();
+                        }
+                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+                    }
+                }, 2000);
+            }
+        });
 
 
         CategoriaService service = retrofit.create(CategoriaService.class);
@@ -124,11 +168,17 @@ public class CategoriasFragment extends Fragment {
                 if (response.isSuccessful()) {
                     listaCategoria = response.body();
                     Categoria categoria = new Categoria();
+
+                    CategoriaDAO categoriaDAO = new CategoriaDAO(getContext());
+
                     for (int i = 0; i < listaCategoria.size(); i++) {
                         Categoria listaCat = listaCategoria.get(i);
 
+                        categoria.setId(listaCat.getId());
                         categoria.setNome(listaCat.getNome());
-                        categoria.setImagem(listaCat.getImagem());
+
+                        categoriaDAO.salvar(categoria);
+                        //categoria.setImagem(listaCat.getImagem());
                         //Log.d("resultado", "resultado: " + listaCat.getId() +" - "+ listaCat.getImagem());
                     }
 
@@ -170,55 +220,6 @@ public class CategoriasFragment extends Fragment {
             adapter.notifyItemRangeRemoved(0, tamanho);
         }
     }
-
-  /*  public class CategoriaTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            return JsonUtils.retornaJsonDeGet(strings[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String json) {
-            super.onPostExecute(json);
-
-            try {
-                JSONArray raiz = new JSONArray(json);
-                String nome = "";
-                for (int i = 0; i < raiz.length(); i++) {
-
-                    JSONObject obj = raiz.getJSONObject(i);
-
-                    Categoria categoria = new Categoria();
-                    //categoria.setId_categoria(String.valueOf(obj.getInt("id_categoria")));
-                    //categoria.setDescricao_categoria(obj.getString("descricao_categoria"));
-                    //categoria.setImagem_categoria(obj.getString("imagem_categoria"));
-
-                    listaCategoria.add(categoria);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-            }
-
-            for (int j = 0; j<listaCategoria.size(); j++){
-                categoria = listaCategoria.get(j);
-                array_id_categoria.add(categoria.getId_categoria());
-                str_id_categoria = array_id_categoria.toArray(str_id_categoria);
-
-                array_nome_categoria.add(categoria.getDescricao_categoria());
-                str_nome_categoria = array_nome_categoria.toArray(str_nome_categoria);
-
-                array_img_categoria.add(categoria.getImagem_categoria());
-                str_img_categoria = array_img_categoria.toArray(str_img_categoria);
-
-            }
-
-            adapter = new CategoriasAdapter(listaCategoria, getActivity());
-            recyclerViewCategoria.setAdapter(adapter);
-            //dialog.dismiss();
-        }
-    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
