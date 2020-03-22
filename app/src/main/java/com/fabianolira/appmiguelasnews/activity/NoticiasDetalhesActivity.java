@@ -75,20 +75,20 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         voltar = findViewById(R.id.voltar);
 
-        recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
+//      recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
         //Definir Layout
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerImagens.setLayoutManager(layoutManager);
+//      RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//      recyclerImagens.setLayoutManager(layoutManager);
         //definir adaptador
-        ImagemAdapter adapter = new ImagemAdapter();
-        recyclerImagens.setAdapter(adapter);
+//      ImagemAdapter adapter = new ImagemAdapter();
+//      recyclerImagens.setAdapter(adapter);
 
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("");
+            getSupportActionBar().setTitle("Bianim");
         }
         appBarLayout = findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);

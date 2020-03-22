@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 
 import com.fabianolira.appmiguelasnews.R;
+import com.fabianolira.appmiguelasnews.fragment.CategoriasFragment;
 import com.fabianolira.appmiguelasnews.fragment.TabFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.util.Config;
@@ -69,22 +70,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(true);
                 drawerLayout.closeDrawers();
-                if(item.getItemId() == R.id.menu_home){
+                if(item.getItemId() == R.id.menu_noticia){
 
-                    Toast.makeText(MainActivity.this, "Menu Home clicado!", Toast.LENGTH_SHORT).show();
-                }
-                if(item.getItemId() == R.id.menu_noticias){
 
                     Toast.makeText(MainActivity.this, "Menu Noticias clicado!", Toast.LENGTH_SHORT).show();
+                }
+                if(item.getItemId() == R.id.menu_categoria){
+                    //Intent intent = new Intent(getApplicationContext(), CategoriasFragment.class);
+                    //startActivity(intent);
+
+                    Toast.makeText(MainActivity.this, "Menu Categorias clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_favoritos){
 
                     Toast.makeText(MainActivity.this, "Menu Favoritos clicado!", Toast.LENGTH_SHORT).show();
                 }
-                if(item.getItemId() == R.id.menu_sair){
 
-                    Toast.makeText(MainActivity.this, "Menu Sair clicado!", Toast.LENGTH_SHORT).show();
-                }
                 return false;
             }
         });

@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_home"
-        android:title="Home"/>
+        android:id="@+id/menu_noticia"
+        android:title="Noticias"/>
 
     <item
-        android:id="@+id/menu_noticias"
-        android:title="Noticias"/>
+        android:id="@+id/menu_categoria"
+        android:title="Categorias"/>
 
     <item
         android:id="@+id/menu_favoritos"
         android:title="Favoritos"/>
 
-    <item
-        android:id="@+id/menu_sair"
-        android:title="Sair"/>
+
 
 </menu>

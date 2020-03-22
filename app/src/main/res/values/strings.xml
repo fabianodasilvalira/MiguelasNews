@@ -16,12 +16,14 @@
     <string name="imagem_data">logo imagem da data</string>
     <string name="imagens_noticias">Imagens do corpo da noticia</string>
     <string name="imagem_splash">Imagem abertura app</string>
-    <string name="email">fabianolira@gmail.com</string>
+    <string name="email">fabianolira@outlook.com</string>
     <string name="imagem_menu">Imagem do menu principal</string>
     <string name="autor">Autor:</string>
     <string name="bordao_miguelasNews">Levando a informação correta, onde você estiver!</string>
     <string name="autor_noticia_adapter">Autor: Fabiano da Silva Lira</string>
     <string name="data_adapter">Data: 12/10/2019</string>
     <string name="categoria">Categoria</string>
+    <string name="admob_appid">ca-app-pub-5690645099349161~9782560796</string>
+    <string name="admob_banner">ca-app-pub-5690645099349161/2659339540</string>
 
 </resources>
