@@ -16,12 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,17 +51,27 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        if (JsonUtils.estaconectado(context)) {
-            Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).placeholder(R.drawable.logonews).into(holder.imagem);
-        }else{
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.placeholder(R.drawable.logonews);
 
-        }
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).apply(requestOptions).into(holder.imagem);
+
 
         //Log.d("imagemnoticia", "imagem : " + Config.URL_SERVIDOR + items.get(position).getImagen_capa());
 
         final Noticia noticia = items.get(position);
         holder.titulo.setText(noticia.getTitulo());
-        holder.data.setText(noticia.getDt_publicacao());
+
+        String data = noticia.getDt_publicacao();
+
+        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            holder.data.setText(newFormat.format(oldFormat.parse(data)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         holder.autor.setText(noticia.getFonte_nm());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {

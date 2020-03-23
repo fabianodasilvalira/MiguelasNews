@@ -20,6 +20,8 @@ import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -50,7 +52,20 @@ public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPo
         Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_capa()).into(holder.imagem);
 
         holder.titulo.setText(items.get(position).getTitulo());
-        holder.data.setText(items.get(position).getDt_publicacao());
+
+
+        String data = items.get(position).getDt_publicacao();
+
+        SimpleDateFormat oldFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat newFormat =  new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            holder.data.setText(newFormat.format(oldFormat.parse(data)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
 
         holder.autor.setText(items.get(position).getFonte_nm());
 

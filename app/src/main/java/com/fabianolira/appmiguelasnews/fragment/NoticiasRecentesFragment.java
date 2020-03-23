@@ -351,4 +351,6 @@ public class NoticiasRecentesFragment extends Fragment {
         });
 
     }
+
+
 }

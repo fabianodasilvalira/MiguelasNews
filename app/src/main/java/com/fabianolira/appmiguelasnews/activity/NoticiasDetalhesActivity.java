@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,8 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -71,24 +75,26 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias_detalhes);
 
-
         toolbar = findViewById(R.id.toolbar);
         voltar = findViewById(R.id.voltar);
 
-//      recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
+       /* ----- VÁRIAS IMAGENS --------- Não excluí
+
+        recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
         //Definir Layout
-//      RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//      recyclerImagens.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerImagens.setLayoutManager(layoutManager);
         //definir adaptador
-//      ImagemAdapter adapter = new ImagemAdapter();
-//      recyclerImagens.setAdapter(adapter);
+        ImagemAdapter adapter = new ImagemAdapter();
+        recyclerImagens.setAdapter(adapter);
+        */
 
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Bianim");
+            getSupportActionBar().setTitle("");
         }
         appBarLayout = findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
@@ -105,7 +111,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                     if (JsonUtils.estaconectado(getApplicationContext())) {
                         collapsingToolbarLayout.setTitle(noticia.getTitulo());
 
-                    }else{
+                    } else {
                         collapsingToolbarLayout.setTitle("");
 
                     }
@@ -120,7 +126,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         collapsingToolbarLayout = findViewById(R.id.ColalapsingToolbar);
 
-
         imgPrincipal = findViewById(R.id.imagemPrincipal);
         // imgFavorito = findViewById(R.id.)
 
@@ -132,7 +137,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         imgPrincipal = findViewById(R.id.imagemPrincipal);
         imgCorpoNoticia = findViewById(R.id.imagemDetalhe);
         listaNoticia = new ArrayList<Noticia>();
-
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(Config.URL_SERVIDOR)
@@ -147,7 +151,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                     .build();
             dialog.show();
 
-
             carregarNoticias();
             //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
         } else {
@@ -158,25 +161,17 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     }
 
-    public void carregarNoticiaOfline(){
+    public void carregarNoticiaOfline() {
 
         NoticiaDAO noticiaDAO = new NoticiaDAO(getApplicationContext());
 
         listaNoticia = noticiaDAO.listarNoticia();
-
 
         txtTitulo.setText(listaNoticia.get(0).getTitulo());
         urlNoticia.setText(listaNoticia.get(0).getFonte_url());
         webDescricao.setText(listaNoticia.get(0).getCorpo());
         txtData.setText(listaNoticia.get(0).getDt_publicacao());
         txtAutor.setText(listaNoticia.get(0).getFonte_nm());
-
-
-        /*Log.i("Testando", "carregarNoticiaOfline: "
-                + listaNoticia.get(0).getTitulo()
-                + listaNoticia.get(0).getCorpo()
-                + listaNoticia.get(0).getDt_publicacao()
-                + listaNoticia.get(0).getFonte_nm());*/
 
     }
 
@@ -204,10 +199,19 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         txtTitulo.setText(noticia.getTitulo());
         urlNoticia.setText("Url da noticia: " + noticia.getFonte_url());
-        txtData.setText(noticia.getDt_publicacao());
+
+        String data = noticia.getDt_publicacao();
+        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            txtData.setText(newFormat.format(oldFormat.parse(data)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         txtAutor.setText(noticia.getFonte_nm());
         webDescricao.setText(noticia.getCorpo());
-
 
         Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagen_capa()).into(imgPrincipal);
         //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_corpo()).into(imgCorpoNoticia);
@@ -220,6 +224,13 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     public void voltar(View view) {
         onBackPressed();
 
+    }
+
+    public void link(View view) {
+        String url = noticia.getFonte_url();
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override

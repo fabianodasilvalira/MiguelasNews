@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.CategoriaDetalhesActivity;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
@@ -47,7 +48,10 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem()).into(holder.imagem);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.placeholder(R.drawable.logonews);
+
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem()).apply(requestOptions).into(holder.imagem);
 
         holder.titulo.setText(items.get(position).getNome());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {

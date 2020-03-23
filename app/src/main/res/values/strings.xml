@@ -20,8 +20,8 @@
     <string name="imagem_menu">Imagem do menu principal</string>
     <string name="autor">Autor:</string>
     <string name="bordao_miguelasNews">Levando a informação correta, onde você estiver!</string>
-    <string name="autor_noticia_adapter">Autor: Fabiano da Silva Lira</string>
-    <string name="data_adapter">Data: 12/10/2019</string>
+    <string name="autor_noticia_adapter">Fabiano da Silva Lira</string>
+    <string name="data_adapter">12/10/2019</string>
     <string name="categoria">Categoria</string>
     <string name="admob_appid">ca-app-pub-5690645099349161~9782560796</string>
     <string name="admob_banner">ca-app-pub-5690645099349161/2659339540</string>

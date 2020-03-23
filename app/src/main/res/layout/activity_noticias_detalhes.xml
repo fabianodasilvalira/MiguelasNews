@@ -121,25 +121,32 @@
                             android:contentDescription="@string/data_noticia"
                             tools:srcCompat="@drawable/ic_action_calendar_month" />
 
+
                         <ImageView
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="26dp"
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginBottom="0dp"
                             android:layout_toEndOf="@id/imageView"
+                            android:layout_toRightOf="@id/imageView"
                             android:contentDescription="@string/imagem_data"
-                            app:srcCompat="@drawable/ic_action_calendar_month"
-                            android:layout_toRightOf="@id/imageView" />
-
+                            app:srcCompat="@drawable/ic_action_calendar_month" />
 
                         <TextView
                             android:id="@+id/textDataDetalheso"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="-2dp"
+                            android:layout_marginLeft="-2dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_toEndOf="@id/imageView2"
+                            android:layout_toRightOf="@id/imageView2"
                             android:text="@string/_12_09_2020"
-                            android:textSize="12sp"
-                            android:layout_toRightOf="@id/imageView2" />
+                            android:textSize="12sp" />
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -168,6 +175,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:paddingBottom="16dp"
+                    android:onClick="link"
                     android:textColor="@color/textoSecundario"
                     android:text=""
                     android:textSize="12sp" />
