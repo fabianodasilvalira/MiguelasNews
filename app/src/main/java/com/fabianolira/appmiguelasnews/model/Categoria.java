@@ -6,6 +6,7 @@ public class Categoria implements Serializable {
 
     private String id;
     private String nome;
+    private String cor;
     private String id_user;
     private String imagem;
     private String dt_in;
@@ -34,6 +35,14 @@ public class Categoria implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
     }
 
     public String getId_user() {

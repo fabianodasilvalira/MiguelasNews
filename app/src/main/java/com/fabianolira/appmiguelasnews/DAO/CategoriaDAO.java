@@ -26,16 +26,16 @@ public class CategoriaDAO implements ICategoriaDAO {
     @Override
     public boolean salvar(Categoria categoria) {
         ContentValues cv = new ContentValues();
-        cv.put("id", categoria.getId());
+
+        cv.put("id_categoria", categoria.getId());
         cv.put("nome", categoria.getNome());
 
 
         try{
             escreve.insert(DbHelper.TABELA_CATEGORIAS, null, cv);
-            //Log.i("INFORMA", "Sucesso ao salvar CATEGORIA:  " + categoria.getId() + "  -  " + categoria.getNome());
-
+            Log.i("INFORMA", "Sucesso ao salvar CATEGORIA:  <><>>  " + categoria.getId() + "  -  " + categoria.getNome());
         }catch (Exception e){
-            Log.e("INFORMA", "Erro ao salvar: CATEGORIA " + e.getMessage());
+            Log.i("INFORMA", "Erro ao salvar: CATEGORIA " + e.getMessage());
             return false;
         }
 
@@ -65,11 +65,11 @@ public class CategoriaDAO implements ICategoriaDAO {
             Categoria categoriaObj = new Categoria();
 
 
-            String id = c.getString(c.getColumnIndex("id"));
+            String id_categoria = c.getString(c.getColumnIndex("id_categoria"));
             String nome = c.getString(c.getColumnIndex("nome"));
 
 
-            categoriaObj.setId(id);
+            categoriaObj.setId(id_categoria);
             categoriaObj.setNome(nome);
 
 

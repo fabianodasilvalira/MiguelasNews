@@ -3,6 +3,7 @@ package com.fabianolira.appmiguelasnews.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
 import com.fabianolira.appmiguelasnews.model.Noticia;
@@ -46,18 +49,22 @@ public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPo
 
     @Override
     public void onBindViewHolder(@NonNull NoticiasPorCategoriaAdapter.MyViewHolder holder, final int position) {
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.placeholder(R.drawable.logonews);
 
-        //Picasso.with(context).load("http://192.168.3.10/api_noticias_Fabiano/web/" + items.get(position)
-        //.getImagem_noticia()).placeholder(R.mipmap.ic_launcher).into(holder.imagem);
-        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem_capa()).into(holder.imagem);
+        Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagen_capa()).apply(requestOptions).into(holder.imagem);
 
-        holder.titulo.setText(items.get(position).getTitulo());
+        final Noticia noticia = items.get(position);
+        holder.titulo.setText(noticia.getTitulo());
+        holder.textoCard.setText(noticia.getCategoria().getNome());
+        holder.cardView.setBackgroundColor(Color.parseColor(items.get(position).getCategoria().getCor()));
 
+        Log.i("IdNoticia", "onClick: " + noticia.getTitulo());
 
-        String data = items.get(position).getDt_publicacao();
+        String data = noticia.getDt_publicacao();
 
-        SimpleDateFormat oldFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat newFormat =  new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
             holder.data.setText(newFormat.format(oldFormat.parse(data)));
@@ -72,7 +79,7 @@ public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPo
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                noticia = items.get(position);
+
                 Config.ID_NOTICIA = String.valueOf(noticia.getId());
 
                 Log.d("id_categoria", "onClick: " + Config.ID_NOTICIA);
@@ -92,18 +99,22 @@ public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imagem;
-        public TextView titulo, data, autor;
+        public ImageView imagem, imagemOfline;
+        public TextView titulo, data, autor, textoCard;
         public LinearLayout linearLayout;
+        public CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             imagem = itemView.findViewById(R.id.imageNoticia);
+            imagemOfline = itemView.findViewById(R.id.imageNoticia);
             titulo = itemView.findViewById(R.id.textNoticiasRecentes);
+            textoCard = itemView.findViewById(R.id.tituloCategoria);
             autor = itemView.findViewById(R.id.autorNoticia);
             data = itemView.findViewById(R.id.dataNoticia);
             linearLayout = itemView.findViewById(R.id.linearLayoutNoticias);
+            cardView = itemView.findViewById(R.id.corCategoria);
 
         }
     }

@@ -22,7 +22,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sqlNoticia = "CREATE TABLE IF NOT EXISTS " + TABELA_NOTICIAS
-                + " (id INTEGER PRIMARY KEY,"
+                + " (id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + " id_noticia TEXT NOT NULL,  "
                 + " titulo TEXT NOT NULL,  "
                 + " corpo TEXT NOT NULL, "
                 + " dt_publicacao TEXT NULL, "
@@ -30,7 +31,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + " fonte_nm TEXT NULL ) ";
 
         String sqlCategoria = "CREATE TABLE IF NOT EXISTS " + TABELA_CATEGORIAS
-                + " (id INTEGER PRIMARY KEY,"
+                + " (id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + " id_categoria TEXT NULL ) "
                 + " nome TEXT NULL ) ";
 
         try {

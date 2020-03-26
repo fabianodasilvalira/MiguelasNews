@@ -19,6 +19,7 @@ public class Noticia implements Serializable {
     private String imagem_capa;
     private String imagem_corpo;
     private List<Imagens> imagens;
+    private Categoria categoria;
     private byte[] imagen_ofline;
 
 
@@ -142,6 +143,14 @@ public class Noticia implements Serializable {
 
     public void setImagen_ofline(byte[] imagen_ofline) {
         this.imagen_ofline = imagen_ofline;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }
 

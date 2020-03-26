@@ -3,6 +3,7 @@ package com.fabianolira.appmiguelasnews.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,13 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
         Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem()).apply(requestOptions).into(holder.imagem);
 
         holder.titulo.setText(items.get(position).getNome());
+        Log.i("CorLinear", "CorLinear: " + ""+items.get(position).getCor());
+        try {
+            holder.linearLayoutCorCategoria.setBackgroundColor(Color.parseColor(items.get(position).getCor()));
+        }catch(IllegalArgumentException e){
+            holder.linearLayoutCorCategoria.setBackgroundColor(Color.parseColor("#0199CA"));
+
+        }
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,16 +90,17 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
         ImageView imagem;
         TextView titulo;
         LinearLayout linearLayout;
+        LinearLayout linearLayoutCorCategoria;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imagem = itemView.findViewById(R.id.imageCategoria);
             titulo = itemView.findViewById(R.id.textTituloCategoria);
+            linearLayoutCorCategoria = itemView.findViewById(R.id.linearLayoutCorCategoria);
             linearLayout = itemView.findViewById(R.id.linearLayoutCategoria);
 
         }
     }
-
 
 }

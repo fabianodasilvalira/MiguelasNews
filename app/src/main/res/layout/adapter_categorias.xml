@@ -36,9 +36,11 @@
 
 
             <LinearLayout
+                android:id="@+id/linearLayoutCorCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:background="@android:color/holo_red_dark"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -50,7 +52,7 @@
                     android:layout_marginTop="-5dp"
                     android:layout_weight="1"
                     android:text="@string/categoria"
-                    android:textColor="@color/textoPrimario"
+                    android:textColor="@android:color/white"
                     android:textSize="14sp" />
 
 

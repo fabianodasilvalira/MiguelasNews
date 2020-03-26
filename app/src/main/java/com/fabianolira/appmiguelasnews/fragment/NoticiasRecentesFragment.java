@@ -229,6 +229,8 @@ public class NoticiasRecentesFragment extends Fragment {
                     //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
 
+
+
                     NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
 
 
@@ -351,6 +353,4 @@ public class NoticiasRecentesFragment extends Fragment {
         });
 
     }
-
-
 }

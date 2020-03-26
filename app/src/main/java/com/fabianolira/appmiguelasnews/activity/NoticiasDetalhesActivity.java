@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.ImagemAdapter;
@@ -213,7 +214,10 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         txtAutor.setText(noticia.getFonte_nm());
         webDescricao.setText(noticia.getCorpo());
 
-        Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagen_capa()).into(imgPrincipal);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.placeholder(R.drawable.logonews);
+
+        Glide.with(getApplicationContext()).load(Config.URL_SERVIDOR + noticia.getImagen_capa()).apply(requestOptions).into(imgPrincipal);
         //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_corpo()).into(imgCorpoNoticia);
 
         Log.d("imagem_Image", "populaDados: " + Config.URL_SERVIDOR + noticia.getImagen_capa());
@@ -222,15 +226,28 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     }
 
     public void voltar(View view) {
+
         onBackPressed();
+        if (JsonUtils.estaconectado(getApplicationContext())) {
+            carregarNoticias();
+
+        } else {
+
+            carregarNoticiaOfline();
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void link(View view) {
-        String url = noticia.getFonte_url();
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
+        if (JsonUtils.estaconectado(getApplicationContext())) {
+            String url = noticia.getFonte_url();
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -244,5 +261,18 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (JsonUtils.estaconectado(getApplicationContext())) {
+            carregarNoticias();
+            //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
+        } else {
+
+            carregarNoticiaOfline();
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
     }
 }

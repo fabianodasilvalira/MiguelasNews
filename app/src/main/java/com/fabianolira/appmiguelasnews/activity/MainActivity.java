@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Menu Noticias clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_categoria){
-                    //Intent intent = new Intent(getApplicationContext(), CategoriasFragment.class);
-                    //startActivity(intent);
+
 
                     Toast.makeText(MainActivity.this, "Menu Categorias clicado!", Toast.LENGTH_SHORT).show();
                 }
