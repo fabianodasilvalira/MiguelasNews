@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,8 +19,10 @@ import android.widget.Toast;
 
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.fragment.CategoriasFragment;
+import com.fabianolira.appmiguelasnews.fragment.NoticiasRecentesFragment;
 import com.fabianolira.appmiguelasnews.fragment.TabFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
+import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.util.Config;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    RecyclerView recyclerViewCategoria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.main_drawer);
+        recyclerViewCategoria = findViewById(R.id.recyclerViewCategoria);
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -72,13 +78,19 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 if(item.getItemId() == R.id.menu_noticia){
 
+                    NoticiasRecentesFragment noticiasRecentes = new NoticiasRecentesFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_container, noticiasRecentes);
+                    fragmentTransaction.commit();
 
-                    Toast.makeText(MainActivity.this, "Menu Noticias clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_categoria){
 
+                    CategoriasFragment categoriasFragment = new CategoriasFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_container, categoriasFragment);
+                    fragmentTransaction.commit();
 
-                    Toast.makeText(MainActivity.this, "Menu Categorias clicado!", Toast.LENGTH_SHORT).show();
                 }
                 if(item.getItemId() == R.id.menu_favoritos){
 

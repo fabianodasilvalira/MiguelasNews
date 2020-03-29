@@ -62,7 +62,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.textoCard.setText(noticia.getCategoria().getNome());
         holder.cardView.setBackgroundColor(Color.parseColor(items.get(position).getCategoria().getCor()));
 
-        Log.i("IdNoticia", "onClick: " + noticia.getTitulo());
+        //Log.i("IdNoticia", "onClick: " + noticia.getTitulo());
 
         String data = noticia.getDt_publicacao();
 
@@ -95,7 +95,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
     @Override
     public int getItemCount() {
-        Log.i("tamanho", "tamanho: " + items.size());
+        //Log.i("tamanho", "tamanho: " + items.size());
         return items.size();
     }
 

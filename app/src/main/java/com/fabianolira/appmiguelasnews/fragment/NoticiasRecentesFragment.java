@@ -178,7 +178,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
         }
 
-        Collections.reverse(listaNoticia2);
+        //Collections.reverse(listaNoticia2);
         adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
         recyclerViewNoticias.setAdapter(adapter);
 
@@ -271,7 +271,7 @@ public class NoticiasRecentesFragment extends Fragment {
                     str_ativo = array_ativo.toArray(str_ativo);
                 }
 
-                Collections.reverse(listaNoticia);
+                //Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
                 recyclerViewNoticias.setAdapter(adapter);
                 dialog.dismiss();

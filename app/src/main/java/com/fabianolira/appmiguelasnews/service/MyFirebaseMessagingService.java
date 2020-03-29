@@ -49,7 +49,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificacao = new NotificationCompat.Builder(this, canal)
                 .setContentTitle(titulo)
                 .setContentText(corpo)
-                .setSmallIcon(R.drawable.noticia)
+                .setSmallIcon(R.drawable.logo_notificacao)
                 .setSound(uriSom)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
