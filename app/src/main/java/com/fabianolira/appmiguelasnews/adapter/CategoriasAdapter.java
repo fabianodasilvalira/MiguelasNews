@@ -22,7 +22,7 @@ import com.fabianolira.appmiguelasnews.activity.CategoriaDetalhesActivity;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
 import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.util.Config;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
         Glide.with(context).load(Config.URL_SERVIDOR + items.get(position).getImagem()).apply(requestOptions).into(holder.imagem);
 
         holder.titulo.setText(items.get(position).getNome());
-        Log.i("CorLinear", "CorLinear: " + ""+items.get(position).getCor());
+
         try {
             holder.linearLayoutCorCategoria.setBackgroundColor(Color.parseColor(items.get(position).getCor()));
         }catch(IllegalArgumentException e){

@@ -1,16 +1,8 @@
 package com.fabianolira.appmiguelasnews.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,28 +12,34 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.adapter.ImagemAdapter;
-import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
-import com.fabianolira.appmiguelasnews.fragment.NoticiasRecentesFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
-import com.fabianolira.appmiguelasnews.model.Imagens;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -58,7 +56,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     private RecyclerView recyclerImagens;
 
-    private Toolbar toolbar;
     private ActionBar actionBar;
     private AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -68,6 +65,9 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     Noticia noticia;
 
+    private AdView mAdView;
+
+
     //WebView webDescricao;
     List<Noticia> listaNoticia;
 
@@ -76,27 +76,41 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias_detalhes);
 
-        toolbar = findViewById(R.id.toolbar);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("All");
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
         voltar = findViewById(R.id.voltar);
 
-       /* ----- VÁRIAS IMAGENS --------- Não excluí
-
-        recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
+       /* ----- VÁRIAS IMAGENS --------- Não excluí*/
+//        recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
         //Definir Layout
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        /*RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerImagens.setLayoutManager(layoutManager);
         //definir adaptador
         ImagemAdapter adapter = new ImagemAdapter();
-        recyclerImagens.setAdapter(adapter);
-        */
+        recyclerImagens.setAdapter(adapter);*/
 
+
+        final Toolbar toolbar = findViewById(R.id.toolbarNoticiasDetalhes);
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("");
         }
+
         appBarLayout = findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -147,7 +161,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         if (JsonUtils.estaconectado(getApplicationContext())) {
             dialog = new SpotsDialog.Builder()
                     .setContext(this)
-                    .setMessage("Carregando a noticia!")
+                    .setMessage("Carregando a noticia, Aguarde!")
                     .setCancelable(false)
                     .build();
             dialog.show();
@@ -157,7 +171,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         } else {
 
             carregarNoticiaOfline();
-            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -170,9 +184,21 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         txtTitulo.setText(listaNoticia.get(0).getTitulo());
         urlNoticia.setText(listaNoticia.get(0).getFonte_url());
+
+        String data = listaNoticia.get(0).getDt_publicacao();
+        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            txtData.setText(newFormat.format(oldFormat.parse(data)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         webDescricao.setText(listaNoticia.get(0).getCorpo());
-        txtData.setText(listaNoticia.get(0).getDt_publicacao());
         txtAutor.setText(listaNoticia.get(0).getFonte_nm());
+
 
     }
 
@@ -199,7 +225,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     public void populaDados() {
 
         txtTitulo.setText(noticia.getTitulo());
-        urlNoticia.setText("Url da noticia: " + noticia.getFonte_url());
+        urlNoticia.setText(noticia.getFonte_url());
 
         String data = noticia.getDt_publicacao();
         SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -239,7 +265,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
     }
 
-    public void link(View view) {
+    public void linkNoticia(View view) {
         if (JsonUtils.estaconectado(getApplicationContext())) {
             String url = noticia.getFonte_url();
             Intent i = new Intent(Intent.ACTION_VIEW);

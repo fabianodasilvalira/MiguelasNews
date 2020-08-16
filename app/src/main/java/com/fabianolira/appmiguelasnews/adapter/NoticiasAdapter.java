@@ -59,6 +59,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         final Noticia noticia = items.get(position);
         holder.titulo.setText(noticia.getTitulo());
+
         holder.textoCard.setText(noticia.getCategoria().getNome());
         holder.cardView.setBackgroundColor(Color.parseColor(items.get(position).getCategoria().getCor()));
 
@@ -81,8 +82,6 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             public void onClick(View view) {
 
                 Config.ID_NOTICIA = noticia.getId();
-
-                Log.i("IdNoticia", "onClick: " + Config.ID_NOTICIA);
 
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

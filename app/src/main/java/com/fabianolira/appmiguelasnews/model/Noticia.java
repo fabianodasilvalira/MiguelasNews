@@ -152,5 +152,6 @@ public class Noticia implements Serializable {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
 }
 

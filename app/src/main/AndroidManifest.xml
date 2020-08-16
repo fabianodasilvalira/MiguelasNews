@@ -4,20 +4,41 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.CategoriaDetalhesActivity" />
-        <activity android:name=".activity.NoticiasDetalhesActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".activity.ApoioActivity"></activity>
+        <activity
+            android:name=".activity.DicasNoticiasActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.CadastroActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.LoginActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CategoriaDetalhesActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.NoticiasDetalhesActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,6 +70,12 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true" /> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5690645099349161~9782560796" />
     </application>
 
 </manifest>

@@ -1,40 +1,32 @@
 package com.fabianolira.appmiguelasnews.activity;
 
-import androidx.annotation.NonNull;
+import android.app.AlertDialog;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.AlertDialog;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.fabianolira.appmiguelasnews.R;
-import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasPorCategoriaAdapter;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
-import com.fabianolira.appmiguelasnews.fragment.NoticiasRecentesFragment;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,18 +41,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CategoriaDetalhesActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNoticias;
-    private NoticiasPorCategoriaAdapter  adapter;
+    private NoticiasPorCategoriaAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Retrofit retrofit;
 
+    private AdView mAdView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria_detalhes);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
@@ -78,7 +82,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbarCategoria);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null){
+        if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(Config.TITULO_CATEGORIA);
         }
@@ -87,7 +91,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
         if (JsonUtils.estaconectado(getApplicationContext())) {
             dialog = new SpotsDialog.Builder()
                     .setContext(this)
-                    .setMessage("Carregando noticias por categoria!")
+                    .setMessage("Carregando noticias por categoria, Aguarde!")
                     .setCancelable(false)
                     .build();
             dialog.show();
@@ -133,16 +137,16 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
     public void carregarNoticias() {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarCategoriaId(Config.ID_CATEGORIA);
-        Log.d("Entrou ", "onResponse: " + call.toString() );
+        //Log.d("Entrou ", "onResponse: " + call.toString());
 
         call.enqueue(new Callback<List<Noticia>>() {
             @Override
             public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
                 if (response.isSuccessful()) {
-                    Log.d("Entrou capa", "onResponse: " );
+                    //Log.d("Entrou capa", "onResponse: ");
                     listaNoticia = response.body();
                     Noticia noticia = new Noticia();
-                    Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
+                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
                 }
 
@@ -163,7 +167,7 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;

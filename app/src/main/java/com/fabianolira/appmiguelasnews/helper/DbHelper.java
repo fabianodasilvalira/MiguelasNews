@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static int VERSION = 1;
-    public static String NOME_DB = "DB_MIGUELASNEWS";
-    public static String TABELA_NOTICIAS = "noticias";
-    public static String TABELA_CATEGORIAS = "categorias";
+    public static String NOME_DB = "MIGUELASNEWS";
+    public static String TABELA_NOTICIAS = "noticia";
+    public static String TABELA_CATEGORIAS = "categoria";
 
     public DbHelper(Context context) {
         super(context, NOME_DB, null, VERSION);
@@ -26,14 +26,17 @@ public class DbHelper extends SQLiteOpenHelper {
                 + " id_noticia TEXT NOT NULL,  "
                 + " titulo TEXT NOT NULL,  "
                 + " corpo TEXT NOT NULL, "
+                + " nome_categoria TEXT NOT NULL, "
+                + " cor_categoria TEXT NOT NULL, "
                 + " dt_publicacao TEXT NULL, "
                 + " fonte_url TEXT NULL, "
                 + " fonte_nm TEXT NULL ) ";
 
         String sqlCategoria = "CREATE TABLE IF NOT EXISTS " + TABELA_CATEGORIAS
                 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + " id_categoria TEXT NULL ) "
-                + " nome TEXT NULL ) ";
+                + " id_categoria TEXT NOT NULL,  "
+                + " nome TEXT NOT NULL,  "
+                + " cor TEXT NOT NULL) ";
 
         try {
 
@@ -41,8 +44,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL(sqlNoticia);
             db.execSQL(sqlCategoria);
 
-            Log.i("INFORMACAO CRIA BD", "Sucesso ao criar a tabela: " + sqlNoticia + "\n" );
-            Log.i("INFORMACAO CRIA BD", "Sucesso ao criar a tabela: " + sqlCategoria + "\n" );
         } catch (Exception e) {
             //Log.i("Info Db", "Erro ao criar a tabela: " + e.getMessage());
         }

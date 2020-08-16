@@ -64,8 +64,8 @@
 
                 <TextView
                     android:id="@+id/textNoticiasRecentes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="41dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
@@ -73,8 +73,9 @@
                     android:layout_weight="1"
                     android:maxLines="3"
                     android:text="Bolsonaro pede na TV 'volta à normalidade' e fim do 'confinamento em massa' e diz que meios de comunicação espalharam 'pavor'"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="15sp" />
+                    android:textColor="@color/common_google_signin_btn_text_light"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

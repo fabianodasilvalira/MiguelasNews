@@ -30,14 +30,14 @@ public class ImagemAdapter extends RecyclerView.Adapter<ImagemAdapter.MyViewHold
         //holder.nome.setText("Titulo da imagem aqui...");
         holder.imagem.setImageResource(R.drawable.logonews);
 
-        // Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
+        //Glide.with(context).load("http://goo.gl/gEgYUd").into(holder.imagem);
 
     }
 
 
     @Override
     public int getItemCount() {
-        return 0;
+        return 5;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

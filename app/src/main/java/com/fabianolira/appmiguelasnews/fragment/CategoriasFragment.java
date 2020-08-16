@@ -31,6 +31,7 @@ import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Categoria;
+import com.fabianolira.appmiguelasnews.model.Noticia;
 import com.fabianolira.appmiguelasnews.util.Config;
 
 import java.util.ArrayList;
@@ -56,8 +57,8 @@ public class CategoriasFragment extends Fragment {
     private Retrofit retrofit;
 
     int tamTexto = 0;
-    ArrayList<String> array_id_categoria, array_nome_categoria, array_img_categoria;
-    String[] str_id_categoria, str_nome_categoria, str_img_categoria;
+    ArrayList<String> array_id_categoria, array_nome_categoria, array_cor_categoria, array_img_categoria;
+    String[] str_id_categoria, str_nome_categoria, str_cor_categoria, str_img_categoria;
 
 
     @Override
@@ -77,10 +78,12 @@ public class CategoriasFragment extends Fragment {
 
         array_id_categoria = new ArrayList<String>();
         array_nome_categoria = new ArrayList<String>();
+        array_cor_categoria = new ArrayList<String>();
         array_img_categoria = new ArrayList<String>();
 
         str_id_categoria = new String[array_id_categoria.size()];
         str_nome_categoria = new String[array_nome_categoria.size()];
+        str_cor_categoria = new String[array_cor_categoria.size()];
         str_img_categoria = new String[array_img_categoria.size()];
 
         retrofit = new Retrofit.Builder()
@@ -117,6 +120,7 @@ public class CategoriasFragment extends Fragment {
                         } else {
                             carregarCategoriasOfline();
                         }
+
                         // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
                     }
                 }, 2000);
@@ -136,6 +140,7 @@ public class CategoriasFragment extends Fragment {
         adapter = new CategoriasAdapter(listaCategoria, getActivity());
         recyclerViewCategoria.setAdapter(adapter);
 
+
     }
 
     public void carregarCategoriasOnline() {
@@ -153,7 +158,7 @@ public class CategoriasFragment extends Fragment {
                         } else {
                             carregarCategoriasOfline();
                         }
-                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+
                     }
                 }, 2000);
             }
@@ -172,26 +177,27 @@ public class CategoriasFragment extends Fragment {
 
                     CategoriaDAO categoriaDAO = new CategoriaDAO(getContext());
 
-                    for (int i = 0; i < listaCategoria.size(); i++) {
-                        Categoria listaCat = listaCategoria.get(i);
-
-                        categoria.setId(listaCat.getId());
-                        categoria.setNome(listaCat.getNome());
+                    for (Categoria news : listaCategoria) {
+                        categoria = news;
 
                         categoriaDAO.salvar(categoria);
-                        //categoria.setImagem(listaCat.getImagem());
-                        //Log.d("resultado", "resultado: " + listaCat.getId() +" - "+ listaCat.getImagem());
+
                     }
 
                 }
 
+
                 for (int j = 0; j < listaCategoria.size(); j++) {
                     categoria = listaCategoria.get(j);
+
                     array_id_categoria.add(categoria.getId());
                     str_id_categoria = array_id_categoria.toArray(str_id_categoria);
 
                     array_nome_categoria.add(categoria.getNome());
                     str_nome_categoria = array_nome_categoria.toArray(str_nome_categoria);
+
+                    array_cor_categoria.add(categoria.getCor());
+                    str_cor_categoria = array_cor_categoria.toArray(str_cor_categoria);
 
                     array_img_categoria.add(categoria.getImagem());
                     str_img_categoria = array_img_categoria.toArray(str_img_categoria);
@@ -221,6 +227,7 @@ public class CategoriasFragment extends Fragment {
             adapter.notifyItemRangeRemoved(0, tamanho);
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -256,6 +263,7 @@ public class CategoriasFragment extends Fragment {
                             Categoria cat = new Categoria();
                             cat.setId(str_id_categoria[i]);
                             cat.setNome(str_nome_categoria[i]);
+                            cat.setCor(str_cor_categoria[i]);
                             cat.setImagem(str_img_categoria[i]);
                             listaCategoria.add(cat);
                         }

@@ -23,13 +23,35 @@
     <string name="autor_noticia_adapter">Fabiano da Silva Lira</string>
     <string name="data_adapter">12/10/2019</string>
     <string name="categoria">CATEGORIA</string>
+
     <string name="admob_appid">ca-app-pub-5690645099349161~9782560796</string>
     <string name="admob_banner">ca-app-pub-5690645099349161/2659339540</string>
+    <string name="banner_ad_unit">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_copia">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="titulo">miguelasNews levando a informação correta até você! onde você estiver, sempre!</string>
     <string name="titulo_categoria">CORONAVIRUS</string>
     <string name="titulo_da_noticia">miguelasNews levando a informação correta até você! onde você estiver, sempre!</string>
     <string name="data">23/12/2020</string>
     <string name="imagem">Imagem</string>
+    <string name="digite_email">Digite seu e-mail</string>
+    <string name="digite_senha">Digite sua senha</string>
+    <string name="botao_logar">Fazer login</string>
+    <string name="nao_tem_conta">Não tem conta? Cadastre-se</string>
+    <string name="digite_nome">Digite o seu nome</string>
+    <string name="botao_cadastrar">Cadastrar</string>
+    <string name="respnder_notiricacao">Responder</string>
+    <string name="todo">TODO</string>
+    <string name="dica_de_noticia" />
+    <string name="enviar_dica_de_noticia">Enviar dica de noticia</string>
+    <string name="descreva_a_noticia">Descreva a noticia</string>
+    <string name="titulo_dica_noticia">Titulo</string>
+    <string name="imagens_dica">Imagens:</string>
+    <string name="todo_dica_imagem">dica Imagem</string>
+    <string name="todo_image">imagem</string>
+    <string name="imagem_01" />
+    <string name="link_da_noticia">link da noticia</string>
+    <string name="link_para_a_not_cia_original">Link para a notícia original.</string>
 
 
 </resources>

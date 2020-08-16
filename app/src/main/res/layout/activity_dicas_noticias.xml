@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F5F5"
+    android:orientation="vertical"
+    tools:context=".activity.DicasNoticiasActivity">
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/imagens_dica"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/dicasNoticiasImagem01"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/imagem_01"
+            app:srcCompat="@drawable/padrao" />
+
+        <ImageView
+            android:id="@+id/dicasNoticiasImagem02"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo_image"
+            app:srcCompat="@drawable/padrao" />
+
+        <ImageView
+            android:id="@+id/dicasNoticiasImagem03"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo_dica_imagem"
+            app:srcCompat="@drawable/padrao" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/dicasNoticiasTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/ic_launcher_background"
+        android:ems="10"
+        android:hint="@string/titulo_dica_noticia"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:padding="16dp"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/dicasNoticiasDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:autofillHints=""
+        android:background="@color/ic_launcher_background"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/descreva_a_noticia"
+        android:inputType="text"
+        android:lines="50"
+        android:padding="16dp"
+        android:textSize="16dp" />
+
+    <Button
+        android:id="@+id/dicasNoticiasBotao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/colorAccent"
+        android:onClick="validarDadosAnuncio"
+        android:text="@string/enviar_dica_de_noticia"
+        android:textColor="@color/textosIcones" />
+</LinearLayout>

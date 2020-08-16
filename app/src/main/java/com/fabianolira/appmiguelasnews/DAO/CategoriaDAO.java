@@ -29,13 +29,12 @@ public class CategoriaDAO implements ICategoriaDAO {
 
         cv.put("id_categoria", categoria.getId());
         cv.put("nome", categoria.getNome());
+        cv.put("cor", categoria.getCor());
 
 
         try{
             escreve.insert(DbHelper.TABELA_CATEGORIAS, null, cv);
-            Log.i("INFORMA", "Sucesso ao salvar CATEGORIA:  <><>>  " + categoria.getId() + "  -  " + categoria.getNome());
         }catch (Exception e){
-            Log.i("INFORMA", "Erro ao salvar: CATEGORIA " + e.getMessage());
             return false;
         }
 
@@ -52,37 +51,33 @@ public class CategoriaDAO implements ICategoriaDAO {
         return false;
     }
 
-    @Override
+
     public List<Categoria> listar() {
 
        List<Categoria> categoriaList = new ArrayList<>();
 
-       String sql = "SELECT * FROM " + DbHelper.TABELA_CATEGORIAS + " ;";
-       Cursor c = le.rawQuery(sql, null);
+        String sql = "SELECT * FROM " + DbHelper.TABELA_CATEGORIAS + ";";
 
-        while (c.moveToNext()){
+        Cursor c = le.rawQuery(sql, null);
+
+        while (c.moveToNext()) {
 
             Categoria categoriaObj = new Categoria();
 
-
             String id_categoria = c.getString(c.getColumnIndex("id_categoria"));
             String nome = c.getString(c.getColumnIndex("nome"));
-
+            String cor = c.getString(c.getColumnIndex("cor"));
 
             categoriaObj.setId(id_categoria);
             categoriaObj.setNome(nome);
+            categoriaObj.setCor(cor);
+
 
 
             categoriaList.add(categoriaObj);
 
-            for (int i = 0; i < categoriaList.size(); i++) {
-
-                //Log.i("INFORMA LISTAR LISTA", "->>: "+ categoriaList.get(i).getNome());
-
-            }
-
         }
-
+        c.close();
         return categoriaList;
     }
 }

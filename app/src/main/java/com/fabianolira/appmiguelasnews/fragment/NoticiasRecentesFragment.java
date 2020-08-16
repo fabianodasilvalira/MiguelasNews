@@ -4,6 +4,7 @@ package com.fabianolira.appmiguelasnews.fragment;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
 import android.os.AsyncTask;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
+import com.fabianolira.appmiguelasnews.activity.MainActivity;
 import com.fabianolira.appmiguelasnews.adapter.NoticiasAdapter;
 import com.fabianolira.appmiguelasnews.api.CategoriaService;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
@@ -66,17 +68,17 @@ public class NoticiasRecentesFragment extends Fragment {
     RecyclerView recyclerViewNoticias;
     private NoticiasAdapter adapter;
     private List<Noticia> listaNoticia = new ArrayList<>();
-    private List<Noticia> listaNoticia2 = new ArrayList<>();
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout = null;
     private AlertDialog dialog;
     private Noticia noticia;
     private Retrofit retrofit;
     private Imagens imagens;
+    public static int CONS_STATUS = 10;
 
     int tamTexto = 0;
-    ArrayList<String> array_noticia, array_id_noticia, array_id_categoria, array_titulo, array_imagem, array_autor, array_data, array_ativo;
-    String[] str_noticia, str_id_noticia, str_id_categoria, str_titulo, str_imagem, str_autor, str_data, str_ativo;
+    ArrayList<String> array_noticia, array_id_noticia, array_id_categoria, array_nome_categoria, array_cor_categoria, array_titulo, array_imagem, array_autor, array_data, array_ativo;
+    String[] str_noticia, str_id_noticia, str_id_categoria,str_nome_categoria, str_cor_categoria, str_titulo, str_imagem, str_autor, str_data, str_ativo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,9 +101,26 @@ public class NoticiasRecentesFragment extends Fragment {
 
         listaNoticia = new ArrayList<Noticia>();
 
+        criandoArrays();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Config.URL_SERVIDOR)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        seTiverConectado();
+
+        metodoOnRefresh();
+
+        return v;
+    }
+
+    private void criandoArrays() {
         array_noticia = new ArrayList<String>();
         array_id_noticia = new ArrayList<String>();
         array_id_categoria = new ArrayList<String>();
+        array_nome_categoria = new ArrayList<String>();
+        array_cor_categoria = new ArrayList<String>();
         array_titulo = new ArrayList<String>();
         array_imagem = new ArrayList<String>();
         array_autor = new ArrayList<String>();
@@ -111,81 +130,45 @@ public class NoticiasRecentesFragment extends Fragment {
         str_noticia = new String[array_noticia.size()];
         str_id_noticia = new String[array_id_noticia.size()];
         str_id_categoria = new String[array_id_categoria.size()];
+        str_nome_categoria = new String[array_nome_categoria.size()];
+        str_cor_categoria = new String[array_cor_categoria.size()];
         str_titulo = new String[array_titulo.size()];
         str_imagem = new String[array_imagem.size()];
         str_autor = new String[array_autor.size()];
         str_data = new String[array_data.size()];
         str_ativo = new String[array_ativo.size()];
+    }
 
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(Config.URL_SERVIDOR)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+    private void seTiverConectado() {
         if (JsonUtils.estaconectado(getContext())) {
             Toast.makeText(getContext(), "Conectado a internet", Toast.LENGTH_SHORT).show();
-
-
             carregarNoticiasOnline();
-
-            //new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
-            //Log.d("noticias", "mostrarJson: " + Config.URL_SERVIDOR + "api/noticia");
-
-
         } else {
-
+            Toast.makeText(getContext(), "Você não está conectado a internet", Toast.LENGTH_SHORT).show();
             carregarNoticiasOfline();
-
         }
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        limpa();
-                        if (JsonUtils.estaconectado(getContext())) {
-                            carregarNoticiasOnline();
-                        } else {
-                            carregarNoticiasOfline();
-                        }
-                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
-                    }
-                }, 2000);
-            }
-        });
-
-        return v;
     }
 
     public void carregarNoticiasOfline() {
-        dialog = new SpotsDialog.Builder()
-                .setContext(getContext())
-                .setMessage("Carregando noticias, Aguarde!")
-                .setCancelable(false)
-                .build();
-        dialog.show();
+
+        carregarDialog();
 
         NoticiaDAO noticiaDAO = new NoticiaDAO(getActivity());
 
-        listaNoticia2 = noticiaDAO.listar();
-
-        for (int i = 0; i > listaNoticia2.size(); i++) {
-            Log.i("LISTAGEM", "-->> " + listaNoticia2.get(i));
-
-        }
+        listaNoticia = noticiaDAO.listar();
 
         //Collections.reverse(listaNoticia2);
-        adapter = new NoticiasAdapter(getActivity(), listaNoticia2);
-        recyclerViewNoticias.setAdapter(adapter);
 
+        adapter = new NoticiasAdapter(getActivity(), listaNoticia);
+        recyclerViewNoticias.setAdapter(adapter);
         dialog.dismiss();
 
-        Log.d("Sem conexao", "onCreateView: ");
         Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+
+        metodoOnRefresh();
+    }
+
+    private void metodoOnRefresh() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -209,16 +192,11 @@ public class NoticiasRecentesFragment extends Fragment {
 
     public void carregarNoticiasOnline() {
 
-        dialog = new SpotsDialog.Builder()
-                .setContext(getContext())
-                .setMessage("Carregando noticias, Aguarde!")
-                .setCancelable(false)
-                .build();
-        dialog.show();
+        carregarDialog();
 
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarNoticia();
-
+        //Call<List<Noticia>> call = service.recuperarNoticiaPorStatus(CONS_STATUS);
 
         call.enqueue(new Callback<List<Noticia>>() {
             @Override
@@ -228,11 +206,7 @@ public class NoticiasRecentesFragment extends Fragment {
                     Noticia noticia = new Noticia();
                     //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
-
-
-
                     NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
-
 
                     for (Noticia news : listaNoticia) {
                         noticia = news;
@@ -242,34 +216,7 @@ public class NoticiasRecentesFragment extends Fragment {
 
                 }
 
-
-                for (int j = 0; j < listaNoticia.size(); j++) {
-                    noticia = listaNoticia.get(j);
-
-                    array_noticia.add(noticia.getCorpo());
-                    str_noticia = array_noticia.toArray(str_noticia);
-
-                    array_id_noticia.add(String.valueOf(noticia.getId()));
-                    str_id_noticia = array_id_noticia.toArray(str_id_noticia);
-
-                    array_id_categoria.add(noticia.getId_categoria());
-                    str_id_categoria = array_id_categoria.toArray(str_id_categoria);
-
-                    array_titulo.add(noticia.getTitulo());
-                    str_titulo = array_titulo.toArray(str_titulo);
-
-                    array_imagem.add(noticia.getImagen_capa());
-                    str_imagem = array_imagem.toArray(str_imagem);
-
-                    array_autor.add(noticia.getFonte_nm());
-                    str_autor = array_autor.toArray(str_autor);
-
-                    array_data.add(noticia.getDt_publicacao());
-                    str_data = array_data.toArray(str_data);
-
-                    array_ativo.add(String.valueOf(noticia.getStatus()));
-                    str_ativo = array_ativo.toArray(str_ativo);
-                }
+                salvarListaOfline();
 
                 //Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
@@ -280,13 +227,56 @@ public class NoticiasRecentesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Noticia>> call, Throwable t) {
-                Toast.makeText(getContext(), "Erro ao se conectar com o servidor.", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
+                Toast.makeText(getContext(), "Erro ao se conectar com o servidor, \n " +
+                        "Tente novamente em alguns minutos!", Toast.LENGTH_SHORT).show();
+                System.exit(0);
+
             }
         });
     }
 
+    private void salvarListaOfline() {
+        for (int j = 0; j < listaNoticia.size(); j++) {
+            noticia = listaNoticia.get(j);
+
+            array_noticia.add(noticia.getCorpo());
+            str_noticia = array_noticia.toArray(str_noticia);
+
+            array_id_noticia.add(String.valueOf(noticia.getId()));
+            str_id_noticia = array_id_noticia.toArray(str_id_noticia);
+
+            array_nome_categoria.add(noticia.getCategoria().getNome());
+            str_nome_categoria = array_nome_categoria.toArray(str_nome_categoria);
+
+            array_cor_categoria.add(noticia.getCategoria().getCor());
+            str_cor_categoria = array_cor_categoria.toArray(str_cor_categoria);
+
+            array_titulo.add(noticia.getTitulo());
+            str_titulo = array_titulo.toArray(str_titulo);
+
+            array_imagem.add(noticia.getImagen_capa());
+            str_imagem = array_imagem.toArray(str_imagem);
+
+            array_autor.add(noticia.getFonte_nm());
+            str_autor = array_autor.toArray(str_autor);
+
+            array_data.add(noticia.getDt_publicacao());
+            str_data = array_data.toArray(str_data);
+
+            array_ativo.add(String.valueOf(noticia.getStatus()));
+            str_ativo = array_ativo.toArray(str_ativo);
+
+        }
+    }
+
+    private void carregarDialog() {
+        dialog = new SpotsDialog.Builder()
+                .setContext(getContext())
+                .setMessage("Carregando noticias, Aguarde!")
+                .setCancelable(false)
+                .build();
+        dialog.show();
+    }
 
     public void limpa() {
         int tamanho = this.listaNoticia.size();
@@ -321,28 +311,30 @@ public class NoticiasRecentesFragment extends Fragment {
                 return false;
             }
 
+
+            //busca
             @Override
             public boolean onQueryTextChange(String newText) {
                 tamTexto = newText.length();
 
                 listaNoticia.clear();
-
-
                 for (int i = 0; i < str_titulo.length; i++) {
                     if (str_titulo[i].toLowerCase().contains(newText.toLowerCase())) {
                         Noticia objItem = new Noticia();
+                        Categoria categoria = new Categoria();
+                        categoria.setNome(str_nome_categoria[i]);
+                        categoria.setCor(str_cor_categoria[i]);
 
                         objItem.setId(str_id_noticia[i]);
-                        objItem.setId_categoria(str_id_categoria[i]);
+                        objItem.setCategoria(categoria);
                         objItem.setTitulo(str_titulo[i]);
                         objItem.setCorpo(str_noticia[i]);
                         objItem.setDt_publicacao(str_data[i]);
                         objItem.setFonte_nm(str_autor[i]);
                         objItem.setImagen_capa(str_imagem[i]);
                         objItem.setStatus(str_ativo[i]);
+
                         listaNoticia.add(objItem);
-
-
                     }
                 }
                 Collections.reverse(listaNoticia);
@@ -353,4 +345,5 @@ public class NoticiasRecentesFragment extends Fragment {
         });
 
     }
+
 }

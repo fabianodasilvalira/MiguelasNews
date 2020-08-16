@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_noticia"
-        android:title="Noticias"/>
 
-    <item
-        android:id="@+id/menu_categoria"
-        android:title="Categorias"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_noticia"
+            android:icon="@drawable/ic_noticia"
+            android:title="Escrever noticias" />
 
-    <item
-        android:id="@+id/menu_favoritos"
-        android:title="Favoritos"/>
+
+        <item
+            android:id="@+id/menu_favoritos"
+            android:icon="@drawable/ic_favorito_24dp"
+            android:title="Favoritos" />
+
+    </group>
+
+
+
+
+            <item
+                android:id="@+id/menu_apoio"
+                android:icon="@drawable/ic_patrocinador"
+                android:title="Apoio" />
+            <item
+                android:id="@+id/menu_sobre"
+                android:icon="@drawable/ic_info_black_24dp"
+                android:title="Sobre" />
 
 
 
