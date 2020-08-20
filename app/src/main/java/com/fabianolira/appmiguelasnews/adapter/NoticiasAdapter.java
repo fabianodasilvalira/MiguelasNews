@@ -1,6 +1,5 @@
 package com.fabianolira.appmiguelasnews.adapter;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -29,7 +28,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 
 public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
@@ -63,8 +61,6 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
         holder.textoCard.setText(noticia.getCategoria().getNome());
         holder.cardView.setBackgroundColor(Color.parseColor(items.get(position).getCategoria().getCor()));
 
-        //Log.i("IdNoticia", "onClick: " + noticia.getTitulo());
-
         String data = noticia.getDt_publicacao();
 
         SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -94,7 +90,6 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
     @Override
     public int getItemCount() {
-        //Log.i("tamanho", "tamanho: " + items.size());
         return items.size();
     }
 
@@ -118,6 +113,13 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
             cardView = itemView.findViewById(R.id.corCategoria);
 
         }
+    }
+
+    public void addNoticias(List<Noticia> noticias){
+        for (Noticia not : noticias){
+            items.add(not);
+        }
+        notifyDataSetChanged();
     }
 
 }

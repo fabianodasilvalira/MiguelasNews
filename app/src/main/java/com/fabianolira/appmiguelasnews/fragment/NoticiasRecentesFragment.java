@@ -52,13 +52,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import dmax.dialog.SpotsDialog;
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +78,13 @@ public class NoticiasRecentesFragment extends Fragment {
     private Retrofit retrofit;
     private Imagens imagens;
     public static int CONS_STATUS = 10;
+
+    // variaveis para paginacao
+    private int qtdPaginacao = 20;
+    private int page = 1;
+    private boolean isLoading = true;
+    private int pastVisibleItems, visibleItemCount, totalItemCount, previoustotal = 0;
+    private int view_threshold = 10;
 
     int tamTexto = 0;
     ArrayList<String> array_noticia, array_id_noticia, array_id_categoria, array_nome_categoria, array_cor_categoria, array_titulo, array_imagem, array_autor, array_data, array_ativo;
@@ -115,38 +125,158 @@ public class NoticiasRecentesFragment extends Fragment {
         return v;
     }
 
-    private void criandoArrays() {
-        array_noticia = new ArrayList<String>();
-        array_id_noticia = new ArrayList<String>();
-        array_id_categoria = new ArrayList<String>();
-        array_nome_categoria = new ArrayList<String>();
-        array_cor_categoria = new ArrayList<String>();
-        array_titulo = new ArrayList<String>();
-        array_imagem = new ArrayList<String>();
-        array_autor = new ArrayList<String>();
-        array_data = new ArrayList<String>();
-        array_ativo = new ArrayList<String>();
-
-        str_noticia = new String[array_noticia.size()];
-        str_id_noticia = new String[array_id_noticia.size()];
-        str_id_categoria = new String[array_id_categoria.size()];
-        str_nome_categoria = new String[array_nome_categoria.size()];
-        str_cor_categoria = new String[array_cor_categoria.size()];
-        str_titulo = new String[array_titulo.size()];
-        str_imagem = new String[array_imagem.size()];
-        str_autor = new String[array_autor.size()];
-        str_data = new String[array_data.size()];
-        str_ativo = new String[array_ativo.size()];
-    }
-
     private void seTiverConectado() {
         if (JsonUtils.estaconectado(getContext())) {
             Toast.makeText(getContext(), "Conectado a internet", Toast.LENGTH_SHORT).show();
-            carregarNoticiasOnline();
+            //carregarNoticiasOnline();
+            carregarNoticiasPaginadas();
         } else {
             Toast.makeText(getContext(), "Você não está conectado a internet", Toast.LENGTH_SHORT).show();
             carregarNoticiasOfline();
         }
+    }
+
+
+    private void metodoOnRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        limpa();
+                        if (JsonUtils.estaconectado(getContext())) {
+                            //carregarNoticiasOnline();
+                            page = 1;
+                            carregarNoticiasPaginadas();
+                        } else {
+                            carregarNoticiasOfline();
+                        }
+                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
+                    }
+                }, 2000);
+            }
+        });
+    }
+
+
+    public void carregarNoticiasPaginadas() {
+
+        carregarDialog();
+
+        NoticiasService service = retrofit.create(NoticiasService.class);
+        Call<List<Noticia>> call = service.recuperarNoticiaPaginada(page);
+        //Call<List<Noticia>> call = service.recuperarNoticiaPorStatus(CONS_STATUS);
+
+        call.enqueue(new Callback<List<Noticia>>() {
+            @Override
+            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                if (response.isSuccessful()) {
+                    listaNoticia = response.body();
+                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
+
+                    /* Pegar dados co header Json
+                    Headers headers = response.headers();
+                    List<String> totalPaginacao = headers.toMultimap().get("x-pagination-total-count");
+                    Float total = Float.parseFloat(totalPaginacao.get(0));
+                    Float numPaginacao = total / qtdPaginacao; */
+
+                    // salvando lista de noticias no sqlite
+                    NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
+                    for (Noticia news : listaNoticia) {
+                        noticia = news;
+
+
+
+
+                        noticiaDAO.salvar(noticia);
+                    }
+
+                }
+
+                salvarListaOfline();
+
+                //Collections.reverse(listaNoticia);
+                adapter = new NoticiasAdapter(getActivity(), listaNoticia);
+                recyclerViewNoticias.setAdapter(adapter);
+                dialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Noticia>> call, Throwable t) {
+                Toast.makeText(getContext(), "Erro ao se conectar com o servidor, \n " +
+                        "Tente novamente em alguns minutos!", Toast.LENGTH_SHORT).show();
+                System.exit(0);
+
+            }
+        });
+
+        recyclerViewNoticias.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+
+                if(dy > 0){
+                 if (page == 1){
+                     Log.d("teste", "inicial antes " + page);
+                     page++;
+                     Log.d("teste", "inicial depois " + page);
+                     performancePagination();
+                 }
+
+
+                }
+            }
+        });
+
+    }
+
+    private void performancePagination(){
+        progressBar.setVisibility(View.VISIBLE);
+
+        NoticiasService service = retrofit.create(NoticiasService.class);
+        Call<List<Noticia>> call = service.recuperarNoticiaPaginada(page);
+
+        call.enqueue(new Callback<List<Noticia>>() {
+            @Override
+            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                // Pegar dados co header Json
+                Headers headers = response.headers();
+                List<String> totalPaginacao = headers.toMultimap().get("x-pagination-total-count");
+                Float total = Float.parseFloat(totalPaginacao.get(0));
+                Float numPaginacao = total / 20;
+
+
+                if (page <= Math.ceil(numPaginacao)){
+                    Log.d("teste", "entro performance " + page + " " + Math.ceil(numPaginacao));
+                    List<Noticia> noticias = response.body();
+                    adapter.addNoticias(noticias);
+                    salvarListaOfline();
+                    page++;
+                    Log.d("teste", "saindo performance " + page);
+
+                }else{
+                    Toast.makeText(getContext(), "Fim das noticias", Toast.LENGTH_SHORT).show();
+                    Log.d("teste", "fim das noticias " + page);
+                }
+                progressBar.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Noticia>> call, Throwable t) {
+                Toast.makeText(getContext(), "Erro ao se conectar com o servidor, \n " +
+                        "Tente novamente em alguns minutos!", Toast.LENGTH_SHORT).show();
+                System.exit(0);
+
+            }
+        });
+
+
     }
 
     public void carregarNoticiasOfline() {
@@ -167,28 +297,6 @@ public class NoticiasRecentesFragment extends Fragment {
 
         metodoOnRefresh();
     }
-
-    private void metodoOnRefresh() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        limpa();
-                        if (JsonUtils.estaconectado(getContext())) {
-                            carregarNoticiasOnline();
-                        } else {
-                            carregarNoticiasOfline();
-                        }
-                        // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
-                    }
-                }, 2000);
-            }
-        });
-    }
-
 
     public void carregarNoticiasOnline() {
 
@@ -344,6 +452,30 @@ public class NoticiasRecentesFragment extends Fragment {
             }
         });
 
+    }
+
+    private void criandoArrays() {
+        array_noticia = new ArrayList<String>();
+        array_id_noticia = new ArrayList<String>();
+        array_id_categoria = new ArrayList<String>();
+        array_nome_categoria = new ArrayList<String>();
+        array_cor_categoria = new ArrayList<String>();
+        array_titulo = new ArrayList<String>();
+        array_imagem = new ArrayList<String>();
+        array_autor = new ArrayList<String>();
+        array_data = new ArrayList<String>();
+        array_ativo = new ArrayList<String>();
+
+        str_noticia = new String[array_noticia.size()];
+        str_id_noticia = new String[array_id_noticia.size()];
+        str_id_categoria = new String[array_id_categoria.size()];
+        str_nome_categoria = new String[array_nome_categoria.size()];
+        str_cor_categoria = new String[array_cor_categoria.size()];
+        str_titulo = new String[array_titulo.size()];
+        str_imagem = new String[array_imagem.size()];
+        str_autor = new String[array_autor.size()];
+        str_data = new String[array_data.size()];
+        str_ativo = new String[array_ativo.size()];
     }
 
 }

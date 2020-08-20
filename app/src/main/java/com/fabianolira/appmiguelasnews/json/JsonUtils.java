@@ -38,6 +38,8 @@ public class JsonUtils {
         return json;
     }
 
+
+
     public static boolean estaconectado(Context context) {
         ConnectivityManager conmag = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

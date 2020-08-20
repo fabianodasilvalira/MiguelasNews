@@ -17,6 +17,7 @@ import java.util.List;
 public class NoticiaDAO implements INoticiaDAO {
     private SQLiteDatabase escreve;
     private SQLiteDatabase le;
+    private int qtdNoticiasOfline;
 
     public NoticiaDAO(Context context) {
         DbHelper db = new DbHelper(context);
@@ -26,6 +27,10 @@ public class NoticiaDAO implements INoticiaDAO {
 
     @Override
     public boolean salvar(Noticia noticia) {
+        qtdNoticiasOfline = Config.QTDNOTICIASOFLINE;
+        Log.i("Quantidade antes", "--> " + qtdNoticiasOfline);
+        while (qtdNoticiasOfline <= 20) {
+            qtdNoticiasOfline++;
         ContentValues cv = new ContentValues();
 
         cv.put("id_noticia", noticia.getId());
@@ -37,15 +42,22 @@ public class NoticiaDAO implements INoticiaDAO {
         cv.put("fonte_nm", noticia.getFonte_nm());
         cv.put("fonte_url", noticia.getFonte_url());
         //cv.put("imagen_capa", noticia.getImagem_capa());
+        Log.i("Quantidade Depois", "--> " + qtdNoticiasOfline);
 
         try {
+
             escreve.insert(DbHelper.TABELA_NOTICIAS, null, cv);
+
+
         } catch (Exception e) {
             //Log.i("Testando", "Erro ao salvar: " + e.getMessage());
             return false;
         }
-
+        }
+        Config.QTDNOTICIASOFLINE = qtdNoticiasOfline;
         return true;
+
+
     }
 
     @Override
@@ -134,7 +146,6 @@ public class NoticiaDAO implements INoticiaDAO {
             //noticiaObj.setImagem_capa(imagem_capa);
 
             noticiasList.add(noticiaObj);
-
 
         }
         c.close();

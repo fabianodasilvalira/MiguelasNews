@@ -14,6 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static String TABELA_NOTICIAS = "noticia";
     public static String TABELA_CATEGORIAS = "categoria";
 
+
     public DbHelper(Context context) {
         super(context, NOME_DB, null, VERSION);
     }
@@ -45,7 +46,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL(sqlCategoria);
 
         } catch (Exception e) {
-            //Log.i("Info Db", "Erro ao criar a tabela: " + e.getMessage());
         }
 
     }
