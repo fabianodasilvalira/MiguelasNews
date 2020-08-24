@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.R;
 import com.fabianolira.appmiguelasnews.activity.CategoriaDetalhesActivity;
 import com.fabianolira.appmiguelasnews.activity.NoticiasDetalhesActivity;
+import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Categoria;
 import com.fabianolira.appmiguelasnews.util.Config;
 
@@ -72,9 +74,13 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
                 Config.TITULO_CATEGORIA = categoria.getNome();
 
                 Log.d("IDCATEGORIA", "onClick: " + Config.ID_CATEGORIA );
-                Intent intent = new Intent(context, CategoriaDetalhesActivity.class);
+                if (JsonUtils.estaconectado(context)) {
+                    Intent intent = new Intent(context, CategoriaDetalhesActivity.class);
+                    context.startActivity(intent);
+                }else{
+                    Toast.makeText(context, "Você não está conectado a internet", Toast.LENGTH_SHORT).show();
+                }
 
-                context.startActivity(intent);
             }
         });
 

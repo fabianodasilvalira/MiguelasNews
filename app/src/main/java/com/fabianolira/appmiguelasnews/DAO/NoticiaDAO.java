@@ -28,9 +28,8 @@ public class NoticiaDAO implements INoticiaDAO {
     @Override
     public boolean salvar(Noticia noticia) {
         qtdNoticiasOfline = Config.QTDNOTICIASOFLINE;
-        Log.i("Quantidade antes", "--> " + qtdNoticiasOfline);
-        while (qtdNoticiasOfline <= 20) {
-            qtdNoticiasOfline++;
+
+        qtdNoticiasOfline++;
         ContentValues cv = new ContentValues();
 
         cv.put("id_noticia", noticia.getId());
@@ -42,7 +41,6 @@ public class NoticiaDAO implements INoticiaDAO {
         cv.put("fonte_nm", noticia.getFonte_nm());
         cv.put("fonte_url", noticia.getFonte_url());
         //cv.put("imagen_capa", noticia.getImagem_capa());
-        Log.i("Quantidade Depois", "--> " + qtdNoticiasOfline);
 
         try {
 
@@ -53,8 +51,10 @@ public class NoticiaDAO implements INoticiaDAO {
             //Log.i("Testando", "Erro ao salvar: " + e.getMessage());
             return false;
         }
-        }
+
         Config.QTDNOTICIASOFLINE = qtdNoticiasOfline;
+
+        Log.i("Testando", "Quantidade " + Config.QTDNOTICIASOFLINE);
         return true;
 
 

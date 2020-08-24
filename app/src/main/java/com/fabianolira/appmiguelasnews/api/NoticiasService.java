@@ -25,10 +25,10 @@ public interface NoticiasService {
     @GET("api/noticia/{id}")
     Call<Noticia> recuperarNoticiaId(@Path("id") String id);
 
-    @GET("api/noticia/por-status/{status}")
-    Call<List<Noticia>> recuperarNoticiaPorStatus(@Path("status") int status);
-
     @GET("api/noticia/por-categoria/{id}")
     Call<List<Noticia>> recuperarCategoriaId(@Path("id") String id);
+
+    @GET("api/noticia/por-status/{status}")
+    Call<List<Noticia>> recuperarNoticiaPorStatus(@Path("status") int status);
 
 }

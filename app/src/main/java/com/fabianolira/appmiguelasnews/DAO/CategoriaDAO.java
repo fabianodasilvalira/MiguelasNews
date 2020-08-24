@@ -72,8 +72,6 @@ public class CategoriaDAO implements ICategoriaDAO {
             categoriaObj.setNome(nome);
             categoriaObj.setCor(cor);
 
-
-
             categoriaList.add(categoriaObj);
 
         }

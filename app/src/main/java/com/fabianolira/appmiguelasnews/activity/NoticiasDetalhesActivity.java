@@ -16,14 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fabianolira.appmiguelasnews.DAO.NoticiaDAO;
 import com.fabianolira.appmiguelasnews.R;
-import com.fabianolira.appmiguelasnews.adapter.ImagemAdapter;
 import com.fabianolira.appmiguelasnews.api.NoticiasService;
 import com.fabianolira.appmiguelasnews.json.JsonUtils;
 import com.fabianolira.appmiguelasnews.model.Noticia;
@@ -64,10 +62,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     Retrofit retrofit;
 
     Noticia noticia;
-
     private AdView mAdView;
-
-
     //WebView webDescricao;
     List<Noticia> listaNoticia;
 
@@ -75,7 +70,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticias_detalhes);
-
 
         FirebaseMessaging.getInstance().subscribeToTopic("All");
 
@@ -92,7 +86,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.voltar);
 
-       /* ----- VÁRIAS IMAGENS --------- Não excluí*/
+        /* ----- VÁRIAS IMAGENS --------- Não excluí*/
 //        recyclerImagens = findViewById(R.id.recyclerViewImagensDetalhes);
 
         //Definir Layout
@@ -167,7 +161,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
             dialog.show();
 
             carregarNoticias();
-            //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
+
         } else {
 
             carregarNoticiaOfline();
@@ -258,7 +252,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
             carregarNoticias();
 
         } else {
-
             carregarNoticiaOfline();
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
@@ -284,7 +277,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
                 break;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }
@@ -294,9 +286,7 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         super.onStart();
         if (JsonUtils.estaconectado(getApplicationContext())) {
             carregarNoticias();
-            //Log.d("urlNoticia", "url da noticia: " + Config.URL_SERVIDOR + "api/noticia/" + Config.ID_NOTICIA);
         } else {
-
             carregarNoticiaOfline();
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }

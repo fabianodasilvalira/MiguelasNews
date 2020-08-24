@@ -29,9 +29,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 + " corpo TEXT NOT NULL, "
                 + " nome_categoria TEXT NOT NULL, "
                 + " cor_categoria TEXT NOT NULL, "
-                + " dt_publicacao TEXT NULL, "
-                + " fonte_url TEXT NULL, "
-                + " fonte_nm TEXT NULL ) ";
+                + " dt_publicacao TEXT NOT NULL, "
+                + " fonte_url TEXT NOT NULL, "
+                + " fonte_nm TEXT NOT NULL ) ";
 
         String sqlCategoria = "CREATE TABLE IF NOT EXISTS " + TABELA_CATEGORIAS
                 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,"
