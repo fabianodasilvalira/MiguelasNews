@@ -52,9 +52,7 @@ public class JsonUtils {
             }
 
             //Verifica se tem internet móvel
-            if (conmag.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
-                return true;
-            }
+            return conmag.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
         }
 
         return false;

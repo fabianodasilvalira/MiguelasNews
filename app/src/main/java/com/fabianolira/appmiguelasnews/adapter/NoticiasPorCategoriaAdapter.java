@@ -82,7 +82,6 @@ public class NoticiasPorCategoriaAdapter extends RecyclerView.Adapter<NoticiasPo
 
                 Config.ID_NOTICIA = String.valueOf(noticia.getId());
 
-                Log.d("id_categoria", "onClick: " + Config.ID_NOTICIA);
                 Intent intent = new Intent(context, NoticiasDetalhesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);

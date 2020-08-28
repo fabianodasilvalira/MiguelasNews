@@ -137,16 +137,13 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
     public void carregarNoticias() {
         NoticiasService service = retrofit.create(NoticiasService.class);
         Call<List<Noticia>> call = service.recuperarCategoriaId(Config.ID_CATEGORIA);
-        //Log.d("Entrou ", "onResponse: " + call.toString());
 
         call.enqueue(new Callback<List<Noticia>>() {
             @Override
             public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
                 if (response.isSuccessful()) {
-                    //Log.d("Entrou capa", "onResponse: ");
                     listaNoticia = response.body();
                     Noticia noticia = new Noticia();
-                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
 
                 }
 
@@ -159,8 +156,6 @@ public class CategoriaDetalhesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Noticia>> call, Throwable t) {
-
-                //Log.d("entrou no erro", "resultado: " + t.getLocalizedMessage());
             }
         });
     }

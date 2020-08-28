@@ -73,7 +73,6 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.My
                 Config.ID_CATEGORIA = categoria.getId();
                 Config.TITULO_CATEGORIA = categoria.getNome();
 
-                Log.d("IDCATEGORIA", "onClick: " + Config.ID_CATEGORIA );
                 if (JsonUtils.estaconectado(context)) {
                     Intent intent = new Intent(context, CategoriaDetalhesActivity.class);
                     context.startActivity(intent);

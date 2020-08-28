@@ -133,7 +133,6 @@ public class CategoriasFragment extends Fragment {
         listaCategoria = categoriaDAO.listar();
 
         for (int i = 0; i > listaCategoria.size(); i++) {
-            Log.i("LISTAGEM", "-->> " + listaCategoria.get(i));
 
         }
 

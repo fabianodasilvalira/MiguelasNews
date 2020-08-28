@@ -240,7 +240,6 @@ public class NoticiasDetalhesActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(Config.URL_SERVIDOR + noticia.getImagen_capa()).apply(requestOptions).into(imgPrincipal);
         //Glide.with(NoticiasDetalhesActivity.this).load(Config.URL_SERVIDOR + noticia.getImagem_corpo()).into(imgCorpoNoticia);
 
-        Log.d("imagem_Image", "populaDados: " + Config.URL_SERVIDOR + noticia.getImagen_capa());
         dialog.dismiss();
 
     }

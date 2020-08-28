@@ -27,7 +27,11 @@ public class NoticiaDAO implements INoticiaDAO {
 
     @Override
     public boolean salvar(Noticia noticia) {
-        qtdNoticiasOfline = Config.QTDNOTICIASOFLINE;
+
+        if(qtdNoticiasOfline == 0){
+            qtdNoticiasOfline++;
+            deletar(noticia);
+        }
 
         qtdNoticiasOfline++;
         ContentValues cv = new ContentValues();
@@ -46,15 +50,11 @@ public class NoticiaDAO implements INoticiaDAO {
 
             escreve.insert(DbHelper.TABELA_NOTICIAS, null, cv);
 
-
         } catch (Exception e) {
-            //Log.i("Testando", "Erro ao salvar: " + e.getMessage());
             return false;
         }
 
         Config.QTDNOTICIASOFLINE = qtdNoticiasOfline;
-
-        Log.i("Testando", "Quantidade " + Config.QTDNOTICIASOFLINE);
         return true;
 
 
@@ -67,7 +67,13 @@ public class NoticiaDAO implements INoticiaDAO {
 
     @Override
     public boolean deletar(Noticia noticia) {
-        return false;
+        try{
+            escreve.delete(DbHelper.TABELA_NOTICIAS, null, null);
+        } catch (Exception e){
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -76,7 +82,6 @@ public class NoticiaDAO implements INoticiaDAO {
         List<Noticia> noticiasList = new ArrayList<>();
 
         String sql = "SELECT * FROM " + DbHelper.TABELA_NOTICIAS + " ;";
-        //Log.i("Testando", "-->: " + sql);
         Cursor c = le.rawQuery(sql, null);
 
         while (c.moveToNext()) {

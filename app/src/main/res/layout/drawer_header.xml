@@ -22,8 +22,6 @@
             android:layout_height="70dp"
             android:layout_marginBottom="6dp"
             android:src="@drawable/logo_header"
-
-
             android:contentDescription="@string/app_name"
          />
 
@@ -35,13 +33,14 @@
             android:textColor="#ffffff"
             android:textSize="14sp"
             android:text="@string/titulo_noticia"/>
-        <TextView
+
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:paddingTop="6dp"
             android:textColor="#ffffff"
-            android:text="@string/email"/>
+            android:text="@string/email"/>-->
 
     </LinearLayout>
 

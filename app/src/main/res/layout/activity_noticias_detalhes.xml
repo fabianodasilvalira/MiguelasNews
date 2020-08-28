@@ -262,7 +262,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             app:adSize="BANNER"
-            app:adUnitId="@string/banner_ad_unit"></com.google.android.gms.ads.AdView>
+            app:adUnitId="@string/admob_banner"></com.google.android.gms.ads.AdView>
     </RelativeLayout>
 
 

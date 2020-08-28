@@ -7,11 +7,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_margin="5dp"
 
 
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -65,14 +70,14 @@
                 <TextView
                     android:id="@+id/textNoticiasRecentes"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="-5dp"
                     android:layout_weight="1"
                     android:maxLines="3"
-                    android:text="Bolsonaro pede na TV 'volta à normalidade' e fim do 'confinamento em massa' e diz que meios de comunicação espalharam 'pavor'"
+                    android:text="@string/bolsonaro_pede_na_tv_volta_normalidade_e_fim_do_confinamento_em_massa_e_diz_que_meios_de_comunica_o_espalharam_pavor"
                     android:textColor="@color/common_google_signin_btn_text_light"
                     android:textSize="15sp"
                     android:textStyle="bold" />

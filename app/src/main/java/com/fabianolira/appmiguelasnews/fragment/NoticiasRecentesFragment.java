@@ -112,11 +112,10 @@ public class NoticiasRecentesFragment extends Fragment {
 
     private void seTiverConectado() {
         if (JsonUtils.estaconectado(getContext())) {
-            Toast.makeText(getContext(), "Conectado a internet", Toast.LENGTH_SHORT).show();
             //carregarNoticiasOnline();
             carregarNoticiasPaginadas();
         } else {
-            Toast.makeText(getContext(), "Você não está conectado a internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Você não está conectado a internet!", Toast.LENGTH_SHORT).show();
             carregarNoticiasOfline();
         }
     }
@@ -137,6 +136,7 @@ public class NoticiasRecentesFragment extends Fragment {
                             page = 1;
                             carregarNoticiasPaginadas();
                         } else {
+                            Toast.makeText(getContext(), "Você não está conectado a internet!", Toast.LENGTH_SHORT).show();
                             carregarNoticiasOfline();
                         }
                         // new NoticiaTask().execute(Config.URL_SERVIDOR + "api/noticia");
@@ -165,9 +165,9 @@ public class NoticiasRecentesFragment extends Fragment {
                     NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
                     for (Noticia news : listaNoticia) {
                         noticia = news;
-
+                        salvarQuantidadeOffline();
                         recuperarQuantidadeOffline();
-                        if (Config.QTDNOTICIASOFLINE < 10){
+                        if (Config.QTDNOTICIASOFLINE <= 20){
                             noticiaDAO.salvar(noticia);
                         }
 
@@ -204,13 +204,11 @@ public class NoticiasRecentesFragment extends Fragment {
                             page++;
                             performancePagination();
                             isLoading = false;
-                            salvarQuantidadeOffline();
 
                         }
                     }
 
                 } else {
-                    Toast.makeText(getContext(), "Você não está conectado a internet", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -238,14 +236,21 @@ public class NoticiasRecentesFragment extends Fragment {
                     List<Noticia> noticias = response.body();
                     adapter.addNoticias(noticias);
 
+                    NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
+                    for (Noticia news : listaNoticia) {
+                        noticia = news;
+                        salvarQuantidadeOffline();
+                        recuperarQuantidadeOffline();
+                        if (Config.QTDNOTICIASOFLINE <= 20){
+                            noticiaDAO.salvar(noticia);
+                        }
+                    }
+                    salvarListaOfline();
                     isLoading = true;
-
                 }else{
                     isLoading = false;
-                    Log.d("teste", "fim das noticias " + page);
                 }
                 progressBar.setVisibility(View.GONE);
-
             }
 
             @Override
@@ -253,7 +258,6 @@ public class NoticiasRecentesFragment extends Fragment {
                 Toast.makeText(getContext(), "Erro ao se conectar com o servidor, \n " +
                         "Tente novamente em alguns minutos!", Toast.LENGTH_SHORT).show();
                 System.exit(0);
-
             }
         });
 
@@ -267,8 +271,6 @@ public class NoticiasRecentesFragment extends Fragment {
 
         listaNoticia = noticiaDAO.listar();
 
-        //Collections.reverse(listaNoticia2);
-
         adapter = new NoticiasAdapter(getActivity(), listaNoticia);
         recyclerViewNoticias.setAdapter(adapter);
         dialog.dismiss();
@@ -281,7 +283,6 @@ public class NoticiasRecentesFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         Integer quantidade = Config.QTDNOTICIASOFLINE;
         editor.putInt("quantidade", quantidade);
-        Log.i("Quantidade Antes", "--> " + quantidade);
 
         editor.commit();
 
@@ -291,7 +292,7 @@ public class NoticiasRecentesFragment extends Fragment {
         if(preferences.contains("quantidade")){
             int qtd = preferences.getInt("quantidade", 20);
             Config.QTDNOTICIASOFLINE = qtd;
-            Log.i("Quantidade Depois", "--> " + qtd);
+
         }else{
 
         }
@@ -347,6 +348,7 @@ public class NoticiasRecentesFragment extends Fragment {
                 listaNoticia.clear();
                 for (int i = 0; i < str_titulo.length; i++) {
                     if (str_titulo[i].toLowerCase().contains(newText.toLowerCase())) {
+
                         Noticia objItem = new Noticia();
                         Categoria categoria = new Categoria();
                         categoria.setNome(str_nome_categoria[i]);
@@ -363,7 +365,7 @@ public class NoticiasRecentesFragment extends Fragment {
                         listaNoticia.add(objItem);
                     }
                 }
-                Collections.reverse(listaNoticia);
+                //Collections.reverse(listaNoticia);
                 adapter = new NoticiasAdapter(getActivity(), listaNoticia);
                 recyclerViewNoticias.setAdapter(adapter);
                 return false;
@@ -429,50 +431,5 @@ public class NoticiasRecentesFragment extends Fragment {
         str_data = new String[array_data.size()];
         str_ativo = new String[array_ativo.size()];
     }
-
-    /*public void carregarNoticiasOnline() {
-
-        carregarDialog();
-
-        NoticiasService service = retrofit.create(NoticiasService.class);
-        Call<List<Noticia>> call = service.recuperarNoticia();
-        //Call<List<Noticia>> call = service.recuperarNoticiaPorStatus(CONS_STATUS);
-
-        call.enqueue(new Callback<List<Noticia>>() {
-            @Override
-            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
-                if (response.isSuccessful()) {
-                    listaNoticia = response.body();
-                    Noticia noticia = new Noticia();
-                    //Log.d("Imagem capa", "onResponse: " + noticia.getImagen_capa());
-
-                    NoticiaDAO noticiaDAO = new NoticiaDAO(getContext());
-
-                    for (Noticia news : listaNoticia) {
-                        noticia = news;
-
-                        noticiaDAO.salvar(noticia);
-                    }
-
-                }
-
-                salvarListaOfline();
-
-                //Collections.reverse(listaNoticia);
-                adapter = new NoticiasAdapter(getActivity(), listaNoticia);
-                recyclerViewNoticias.setAdapter(adapter);
-                dialog.dismiss();
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Noticia>> call, Throwable t) {
-                Toast.makeText(getContext(), "Erro ao se conectar com o servidor, \n " +
-                        "Tente novamente em alguns minutos!", Toast.LENGTH_SHORT).show();
-                System.exit(0);
-
-            }
-        });
-    }*/
 
 }

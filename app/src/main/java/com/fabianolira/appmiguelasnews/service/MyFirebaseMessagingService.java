@@ -30,7 +30,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String id = notificacao.getData().get("id");
         Config.ID_NOTICIA  = id;
         enviarNotificacao(titulo, corpo, id);
-        Log.d("notificacao", "Notificação recebida id: " + notificacao.getData().get("id"));
     }
 
     private void enviarNotificacao(String titulo, String corpo, String id){
@@ -53,7 +52,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSound(uriSom)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
-        Log.d("notificacao aqui2", "Config id: " + Config.ID_NOTICIA );
         // Recuperar notificationManager
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
