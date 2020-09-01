@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 drawerLayout.closeDrawers();
                 if (item.getItemId() == R.id.menu_noticia) {
-                    String url = "https://miguelasnew.000webhostapp.com/noticia/create";
+                    String url = "http://miguelasnews.online/noticia/create";
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
